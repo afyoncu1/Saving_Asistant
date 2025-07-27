@@ -8,38 +8,39 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 240 10% 98%;
-    --foreground: 215 25% 15%;
+    --background: 150 20% 98%;
+    --foreground: 150 25% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 215 25% 15%;
+    --card-foreground: 150 25% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 215 25% 15%;
+    --popover-foreground: 150 25% 15%;
 
-    --primary: 215 50% 25%;
-    --primary-foreground: 45 95% 95%;
+    --primary: 150 50% 35%;
+    --primary-foreground: 0 0% 98%;
 
-    --secondary: 215 20% 92%;
-    --secondary-foreground: 215 50% 25%;
+    --secondary: 150 20% 92%;
+    --secondary-foreground: 150 50% 25%;
 
-    --muted: 215 15% 95%;
-    --muted-foreground: 215 15% 45%;
+    --muted: 150 15% 95%;
+    --muted-foreground: 150 15% 45%;
 
-    --accent: 45 90% 65%;
-    --accent-foreground: 215 50% 15%;
+    --accent: 200 80% 50%;
+    --accent-foreground: 0 0% 98%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 215 15% 88%;
-    --input: 215 15% 96%;
-    --ring: 215 50% 25%;
+    --border: 150 15% 88%;
+    --input: 150 15% 96%;
+    --ring: 150 50% 35%;
 
-    --financial: 215 60% 20%;
-    --financial-foreground: 45 95% 95%;
-    --financial-accent: 45 85% 55%;
-    --financial-muted: 215 30% 85%;
+    --success: 150 60% 45%;
+    --success-foreground: 0 0% 98%;
+    --work-time: 200 70% 40%;
+    --work-time-foreground: 0 0% 98%;
+    --savings: 150 80% 25%;
 
     --radius: 0.5rem;
 

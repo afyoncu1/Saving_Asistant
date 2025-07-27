@@ -1,7 +1,7 @@
-import BlackScholesCalculator from '@/components/BlackScholesCalculator';
+import WorkTimeCostCalculator from '@/components/WorkTimeCostCalculator';
 
 const Index = () => {
-  return <BlackScholesCalculator />;
+  return <WorkTimeCostCalculator />;
 };
 
 export default Index;

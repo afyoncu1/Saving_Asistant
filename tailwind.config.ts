@@ -52,12 +52,15 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				financial: {
-					DEFAULT: 'hsl(var(--financial))',
-					foreground: 'hsl(var(--financial-foreground))',
-					accent: 'hsl(var(--financial-accent))',
-					muted: 'hsl(var(--financial-muted))'
+				success: {
+					DEFAULT: 'hsl(var(--success))',
+					foreground: 'hsl(var(--success-foreground))'
 				},
+				'work-time': {
+					DEFAULT: 'hsl(var(--work-time))',
+					foreground: 'hsl(var(--work-time-foreground))'
+				},
+				savings: 'hsl(var(--savings))',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
