@@ -52,6 +52,12 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				financial: {
+					DEFAULT: 'hsl(var(--financial))',
+					foreground: 'hsl(var(--financial-foreground))',
+					accent: 'hsl(var(--financial-accent))',
+					muted: 'hsl(var(--financial-muted))'
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
