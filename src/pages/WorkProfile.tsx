@@ -77,36 +77,36 @@ const WorkProfile: React.FC = () => {
   const isFormValid = formData.monthlySalary > 0 && formData.workingDays > 0 && formData.hoursPerDay > 0;
 
   return (
-    <div className="min-h-screen bg-background p-4">
-      <div className="max-w-2xl mx-auto space-y-6">
+    <div className="h-screen bg-background p-3 overflow-hidden">
+      <div className="h-full max-w-md mx-auto flex flex-col space-y-4">
         {/* Header */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 flex-shrink-0">
           <Link to="/">
-            <Button variant="outline" size="sm">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Calculator
+            <Button variant="outline" size="sm" className="px-2 py-1 text-xs">
+              <ArrowLeft className="h-3 w-3 mr-1" />
+              Back
             </Button>
           </Link>
           <div>
-            <h1 className="text-3xl font-bold text-primary">Work Profile Setup</h1>
-            <p className="text-muted-foreground">Configure your salary and work schedule</p>
+            <h1 className="text-2xl font-bold text-primary">Work Profile</h1>
+            <p className="text-muted-foreground text-sm">Setup your salary info</p>
           </div>
         </div>
 
         {/* Work Profile Form */}
-        <Card className="border-primary/20">
-          <CardHeader className="bg-primary text-primary-foreground">
-            <CardTitle className="flex items-center gap-2">
+        <Card className="border-primary/20 flex-1 min-h-0 flex flex-col bg-gradient-to-br from-primary/5 to-primary/10">
+          <CardHeader className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground p-4 flex-shrink-0">
+            <CardTitle className="flex items-center gap-2 text-lg">
               <DollarSign className="h-5 w-5" />
               Your Work Information
             </CardTitle>
-            <CardDescription className="text-primary-foreground/80">
-              Enter your salary and work schedule to calculate your hourly rate
+            <CardDescription className="text-primary-foreground/80 text-sm">
+              Enter your details to calculate hourly rate
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6 p-6">
-            <div className="space-y-4">
-              <div className="space-y-2">
+          <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="space-y-3">
+              <div className="space-y-1">
                 <Label htmlFor="monthlySalary" className="text-sm font-medium">
                   Monthly Salary ($)
                 </Label>
@@ -117,14 +117,14 @@ const WorkProfile: React.FC = () => {
                   placeholder="5000"
                   value={formData.monthlySalary || ''}
                   onChange={(e) => handleInputChange('monthlySalary', e.target.value)}
-                  className="border-primary/30 focus:border-primary"
+                  className="border-primary/30 focus:border-primary bg-background/80"
                 />
               </div>
               
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
                   <Label htmlFor="workingDays" className="text-sm font-medium">
-                    Working Days per Month
+                    Days/Month
                   </Label>
                   <Input
                     id="workingDays"
@@ -133,12 +133,12 @@ const WorkProfile: React.FC = () => {
                     placeholder="22"
                     value={formData.workingDays || ''}
                     onChange={(e) => handleInputChange('workingDays', e.target.value)}
-                    className="border-primary/30 focus:border-primary"
+                    className="border-primary/30 focus:border-primary bg-background/80"
                   />
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-1">
                   <Label htmlFor="hoursPerDay" className="text-sm font-medium">
-                    Hours per Day
+                    Hours/Day
                   </Label>
                   <Input
                     id="hoursPerDay"
@@ -147,54 +147,42 @@ const WorkProfile: React.FC = () => {
                     placeholder="8"
                     value={formData.hoursPerDay || ''}
                     onChange={(e) => handleInputChange('hoursPerDay', e.target.value)}
-                    className="border-primary/30 focus:border-primary"
+                    className="border-primary/30 focus:border-primary bg-background/80"
                   />
                 </div>
               </div>
             </div>
 
             {calculatedHourlyRate > 0 && (
-              <div className="p-4 bg-success/10 border border-success/20 rounded-lg">
+              <div className="p-4 bg-gradient-to-r from-success/20 to-success/10 border border-success/30 rounded-lg backdrop-blur-sm">
                 <div className="flex items-center gap-2 mb-2">
-                  <Calculator className="h-5 w-5 text-success" />
-                  <h3 className="font-semibold text-success">Calculated Hourly Rate</h3>
+                  <Calculator className="h-4 w-4 text-success" />
+                  <h3 className="font-semibold text-success text-sm">Calculated Rate</h3>
                 </div>
-                <p className="text-2xl font-bold text-success">
+                <p className="text-xl font-bold text-success">
                   ${calculatedHourlyRate.toFixed(2)}/hour
                 </p>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Based on {formData.workingDays * formData.hoursPerDay} hours per month
+                <p className="text-xs text-muted-foreground mt-1">
+                  {formData.workingDays * formData.hoursPerDay} hours/month
                 </p>
               </div>
             )}
 
-            <div className="flex gap-3">
+            <div className="flex gap-2 pt-2">
               <Button 
                 onClick={handleSave}
                 disabled={!isFormValid}
-                className="flex-1"
+                className="flex-1 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
               >
                 <Save className="h-4 w-4 mr-2" />
                 Save Profile
               </Button>
               <Link to="/">
-                <Button variant="outline">
+                <Button variant="outline" className="px-4">
                   Cancel
                 </Button>
               </Link>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Info Card */}
-        <Card className="border-primary/20">
-          <CardContent className="p-6">
-            <h3 className="text-lg font-semibold text-primary mb-3">ℹ️ About Your Work Profile</h3>
-            <p className="text-muted-foreground leading-relaxed">
-              Your work profile information is saved locally in your browser and is used to calculate 
-              how much working time any purchase costs. This helps you make more informed spending 
-              decisions by understanding the real value of your time.
-            </p>
           </CardContent>
         </Card>
       </div>
