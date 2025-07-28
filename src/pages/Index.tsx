@@ -1,7 +1,7 @@
-import WorkTimeCostCalculator from '@/components/WorkTimeCostCalculator';
+import ProductCalculator from '@/components/ProductCalculator';
 
 const Index = () => {
-  return <WorkTimeCostCalculator />;
+  return <ProductCalculator />;
 };
 
 export default Index;
