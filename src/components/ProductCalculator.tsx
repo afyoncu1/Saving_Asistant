@@ -67,8 +67,12 @@ const ProductCalculator: React.FC = () => {
       <div className="h-full max-w-md mx-auto flex flex-col space-y-4">
         {/* Header */}
         <div className="text-center space-y-1 flex-shrink-0">
-          <div className="flex items-center justify-center gap-2">
-            <Clock className="h-6 w-6 text-primary" />
+          <div className="flex items-center justify-center gap-3">
+            <img 
+              src="/lovable-uploads/6d15c0f9-f3ec-4b49-894a-4b5a55ff860b.png" 
+              alt="Saving Assistant Logo" 
+              className="h-12 w-12"
+            />
             <h1 className="text-2xl font-bold text-primary">Saving Assistant</h1>
           </div>
           <p className="text-muted-foreground text-sm">
