@@ -71,7 +71,7 @@ const ProductCalculator: React.FC = () => {
             <img 
               src="/lovable-uploads/6d15c0f9-f3ec-4b49-894a-4b5a55ff860b.png" 
               alt="Saving Assistant Logo" 
-              className="h-12 w-12"
+              className="h-16 w-16 bg-transparent object-contain rounded-lg"
             />
             <h1 className="text-2xl font-bold text-primary">Saving Assistant</h1>
           </div>
@@ -154,12 +154,12 @@ const ProductCalculator: React.FC = () => {
             </div>
 
             {productCost && workProfile && (
-              <div className="space-y-3">
+              <div className="space-y-3 animate-gold-glow">
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="p-4 bg-accent/10 border border-accent/20 rounded-lg text-center">
-                    <Clock className="h-6 w-6 text-accent mx-auto mb-2" />
-                    <h3 className="text-sm font-semibold text-accent mb-1">Work Hours</h3>
-                    <p className="text-xl font-bold text-accent">
+                  <div className="p-4 bg-gold/10 border border-gold/30 rounded-lg text-center transition-all duration-300 hover:bg-gold/20">
+                    <Clock className="h-6 w-6 text-gold mx-auto mb-2" />
+                    <h3 className="text-sm font-semibold text-gold mb-1">Work Hours</h3>
+                    <p className="text-xl font-bold text-gold">
                       {formatTime(productCost.hoursNeeded, workProfile)}
                     </p>
                     <p className="text-xs text-muted-foreground mt-1">
