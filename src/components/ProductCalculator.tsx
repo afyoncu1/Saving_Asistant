@@ -69,7 +69,7 @@ const ProductCalculator: React.FC = () => {
         <div className="text-center space-y-1 flex-shrink-0">
           <div className="flex items-center justify-center gap-2">
             <Clock className="h-6 w-6 text-primary" />
-            <h1 className="text-2xl font-bold text-primary">Time Cost Calculator</h1>
+            <h1 className="text-2xl font-bold text-primary">Saving Assistant</h1>
           </div>
           <p className="text-muted-foreground text-sm">
             How much work time does it cost?
