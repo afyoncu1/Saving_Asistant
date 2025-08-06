@@ -33,6 +33,27 @@ const ProductCalculator: React.FC = () => {
   const { workProfile, hasProfile } = useWorkProfile();
   const [productPrice, setProductPrice] = useState<number>(0);
   const [productCost, setProductCost] = useState<ProductCost | null>(null);
+  const [showCoins, setShowCoins] = useState<boolean>(false);
+
+  const playGoldCoinSound = () => {
+    // Create a simple coin sound using Web Audio API
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1);
+    oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.2);
+    
+    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+    
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + 0.3);
+  };
 
   const calculateProductCost = () => {
     if (productPrice > 0 && workProfile?.hourlyRate) {
@@ -44,6 +65,13 @@ const ProductCalculator: React.FC = () => {
         hoursNeeded,
         daysNeeded
       });
+      
+      // Trigger coin animation and sound
+      setShowCoins(true);
+      playGoldCoinSound();
+      
+      // Hide coins after animation
+      setTimeout(() => setShowCoins(false), 2000);
     }
   };
 
@@ -63,7 +91,7 @@ const ProductCalculator: React.FC = () => {
   };
 
   return (
-    <div className="h-screen bg-background p-3 overflow-hidden">
+    <div className="h-screen bg-background p-3 overflow-hidden relative">
       <div className="h-full max-w-md mx-auto flex flex-col space-y-4">
         {/* Header */}
         <div className="text-center space-y-1 flex-shrink-0">
@@ -71,7 +99,11 @@ const ProductCalculator: React.FC = () => {
             <img 
               src="/lovable-uploads/6d15c0f9-f3ec-4b49-894a-4b5a55ff860b.png" 
               alt="Saving Assistant Logo" 
-              className="h-16 w-16 bg-transparent object-contain rounded-lg"
+              className="h-16 w-16 object-contain rounded-lg"
+              style={{ 
+                filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.1))',
+                mixBlendMode: 'multiply'
+              }}
             />
             <h1 className="text-2xl font-bold text-primary">Saving Assistant</h1>
           </div>
@@ -197,6 +229,45 @@ const ProductCalculator: React.FC = () => {
             )}
           </CardContent>
         </Card>
+        
+        {/* Gold Coins Animation */}
+        {showCoins && (
+          <div className="absolute inset-0 pointer-events-none">
+            {/* Falling coins */}
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={`fall-${i}`}
+                className="absolute w-6 h-6 bg-gold rounded-full animate-coin-fall"
+                style={{
+                  left: `${20 + i * 12}%`,
+                  animationDelay: `${i * 0.1}s`,
+                  boxShadow: '0 0 10px rgba(255, 215, 0, 0.5)'
+                }}
+              >
+                <div className="w-full h-full bg-gold/80 rounded-full flex items-center justify-center text-gold-foreground text-xs font-bold">
+                  $
+                </div>
+              </div>
+            ))}
+            
+            {/* Rising coins */}
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={`rise-${i}`}
+                className="absolute w-5 h-5 bg-gold rounded-full animate-coin-rise"
+                style={{
+                  left: `${30 + i * 15}%`,
+                  animationDelay: `${0.2 + i * 0.15}s`,
+                  boxShadow: '0 0 8px rgba(255, 215, 0, 0.4)'
+                }}
+              >
+                <div className="w-full h-full bg-gold/80 rounded-full flex items-center justify-center text-gold-foreground text-xs font-bold">
+                  $
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
