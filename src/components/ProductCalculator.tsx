@@ -82,7 +82,7 @@ const ProductCalculator: React.FC = () => {
             <CardContent className="p-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-semibold text-primary text-sm">${workProfile.hourlyRate.toFixed(2)}/hour</h3>
+                  <h3 className="font-semibold text-primary text-sm">You earn ${workProfile.hourlyRate.toFixed(2)}/hour</h3>
                   <p className="text-xs text-muted-foreground">
                     ${workProfile.monthlySalary}/mo • {workProfile.workingDays}d • {workProfile.hoursPerDay}h/day
                   </p>
