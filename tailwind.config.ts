@@ -141,6 +141,22 @@ export default {
 						transform: 'translateY(-100px) rotate(-720deg)',
 						opacity: '0'
 					}
+				},
+				'coin-arc': {
+					'0%': {
+						transform: 'translate(var(--x-start, 0px), 20px) scale(var(--scale, 1)) rotate(0deg)',
+						opacity: '0'
+					},
+					'15%': {
+						opacity: '1'
+					},
+					'60%': {
+						transform: 'translate(var(--x-mid, 0px), -120px) scale(var(--scale, 1)) rotate(360deg)'
+					},
+					'100%': {
+						transform: 'translate(var(--x-end, 0px), -40px) scale(var(--scale, 1)) rotate(540deg)',
+						opacity: '0'
+					}
 				}
 			},
 			animation: {
@@ -148,7 +164,8 @@ export default {
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'gold-glow': 'gold-glow 0.6s ease-out',
 				'coin-fall': 'coin-fall 1.5s ease-out',
-				'coin-rise': 'coin-rise 1.2s ease-out'
+				'coin-rise': 'coin-rise 1.2s ease-out',
+				'coin-arc': 'coin-arc 1.2s cubic-bezier(0.2,0.7,0,1) forwards'
 			}
 		}
 	},

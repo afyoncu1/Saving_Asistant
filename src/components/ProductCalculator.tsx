@@ -7,6 +7,8 @@ import { Clock, AlertCircle, Settings } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useWorkProfile, WorkProfile } from '@/hooks/useWorkProfile';
 import { Link } from 'react-router-dom';
+import CoinSpillAnimation from '@/components/animations/CoinSpillAnimation';
+import { useCoinSound } from '@/hooks/useCoinSound';
 
 interface ProductCost {
   price: number;
@@ -35,25 +37,7 @@ const ProductCalculator: React.FC = () => {
   const [productCost, setProductCost] = useState<ProductCost | null>(null);
   const [showCoins, setShowCoins] = useState<boolean>(false);
 
-  const playGoldCoinSound = () => {
-    // Create a simple coin sound using Web Audio API
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
-    
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-    
-    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-    oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1);
-    oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.2);
-    
-    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-    
-    oscillator.start(audioContext.currentTime);
-    oscillator.stop(audioContext.currentTime + 0.3);
-  };
+  const { playCoinSpill } = useCoinSound();
 
   const calculateProductCost = () => {
     if (productPrice > 0 && workProfile?.hourlyRate) {
@@ -68,10 +52,10 @@ const ProductCalculator: React.FC = () => {
       
       // Trigger coin animation and sound
       setShowCoins(true);
-      playGoldCoinSound();
+      playCoinSpill();
       
       // Hide coins after animation
-      setTimeout(() => setShowCoins(false), 2000);
+      setTimeout(() => setShowCoins(false), 1600);
     }
   };
 
