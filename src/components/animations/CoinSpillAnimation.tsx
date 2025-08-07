@@ -16,17 +16,17 @@ const CoinSpillAnimation: React.FC<CoinSpillAnimationProps> = ({ active = true }
       size: number; // scale factor
     }> = [];
 
-    const total = 12;
+    const total = 10;
     for (let i = 0; i < total; i++) {
       const isLeft = i % 2 === 0;
       const spread = isLeft ? -1 : 1;
-      const leftOffsetPct = (Math.random() * 8 - 4); // around center
-      const delay = 0.02 + i * 0.04 + Math.random() * 0.02;
-      const duration = 0.8 + Math.random() * 0.4;
-      // Start from bottom, arc upward then to sides
-      const xMid = spread * (20 + Math.random() * 30); // px - less extreme
-      const xEnd = spread * (60 + Math.random() * 60); // px - final spread
-      const size = i < 4 ? 1.4 : 0.8 + Math.random() * 0.6; // some big coins first
+      const leftOffsetPct = (Math.random() * 6 - 3); // around center
+      const delay = 0.1 + i * 0.08 + Math.random() * 0.05;
+      const duration = 1.2 + Math.random() * 0.3;
+      // Start from top, spread as falling down
+      const xMid = spread * (30 + Math.random() * 20); // px - gradual spread
+      const xEnd = spread * (80 + Math.random() * 60); // px - final spread
+      const size = i < 3 ? 1.6 : 0.9 + Math.random() * 0.8; // some big coins first
       arr.push({ id: `coin-${i}`, leftOffsetPct, delay, duration, xMid, xEnd, size });
     }
     return arr;
@@ -39,10 +39,10 @@ const CoinSpillAnimation: React.FC<CoinSpillAnimationProps> = ({ active = true }
       {coins.map(c => (
         <div
           key={c.id}
-          className="absolute animate-coin-arc"
+          className="absolute animate-coin-fall-spill"
           style={{
             left: `calc(50% + ${c.leftOffsetPct}%)`,
-            bottom: '40px', // Start from bottom area
+            top: '0px', // Start from top
             animationDelay: `${c.delay}s`,
             animationDuration: `${c.duration}s`,
             // CSS vars used inside keyframes

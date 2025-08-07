@@ -142,22 +142,22 @@ export default {
 						opacity: '0'
 					}
 				},
-				'coin-arc': {
+				'coin-fall-spill': {
 					'0%': {
-						transform: 'translate(var(--x-start, 0px), 0px) scale(var(--scale, 1)) rotate(0deg)',
+						transform: 'translate(var(--x-start, 0px), -100px) scale(var(--scale, 1)) rotate(0deg)',
 						opacity: '0'
 					},
-					'10%': {
+					'15%': {
 						opacity: '1'
 					},
-					'30%': {
-						transform: 'translate(var(--x-mid, 0px), -80px) scale(var(--scale, 1)) rotate(180deg)'
+					'40%': {
+						transform: 'translate(var(--x-mid, 0px), 50px) scale(var(--scale, 1)) rotate(180deg)'
 					},
-					'70%': {
-						transform: 'translate(var(--x-end, 0px), -120px) scale(var(--scale, 1)) rotate(360deg)'
+					'80%': {
+						transform: 'translate(var(--x-end, 0px), 200px) scale(var(--scale, 1)) rotate(360deg)'
 					},
 					'100%': {
-						transform: 'translate(var(--x-end, 0px), -60px) scale(var(--scale, 1)) rotate(540deg)',
+						transform: 'translate(var(--x-end, 0px), 300px) scale(var(--scale, 1)) rotate(540deg)',
 						opacity: '0'
 					}
 				}
@@ -168,7 +168,7 @@ export default {
 				'gold-glow': 'gold-glow 0.6s ease-out',
 				'coin-fall': 'coin-fall 1.5s ease-out',
 				'coin-rise': 'coin-rise 1.2s ease-out',
-				'coin-arc': 'coin-arc 1.2s cubic-bezier(0.2,0.7,0,1) forwards'
+				'coin-fall-spill': 'coin-fall-spill 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards'
 			}
 		}
 	},

@@ -12,70 +12,92 @@ export const useCoinSound = () => {
     return ctxRef.current;
   };
 
-  const playMetallicClink = (time: number, pitch: number, pan: number) => {
+  const createRealisticCoinSound = (time: number, pitch: number, volume: number, pan: number) => {
     const ctx = getCtx();
     if (!ctx) return;
 
-    // Primary metallic tone
+    // Fundamental metallic frequency - gold coins have a specific pitch range
+    const baseFreq = 900 + pitch * 400; // 900-1300 Hz range for gold
+    
+    // Primary metallic resonance
     const osc1 = ctx.createOscillator();
     osc1.type = 'triangle';
-    const freq = 800 + pitch * 600; // 800-1400 Hz range
-    osc1.frequency.setValueAtTime(freq, time);
-    osc1.frequency.exponentialRampToValueAtTime(freq * 0.3, time + 0.08);
+    osc1.frequency.setValueAtTime(baseFreq, time);
+    osc1.frequency.exponentialRampToValueAtTime(baseFreq * 0.4, time + 0.15);
 
-    // Harmonic overtone
+    // Harmonic overtone (creates the "ring")
     const osc2 = ctx.createOscillator();
     osc2.type = 'sine';
-    osc2.frequency.setValueAtTime(freq * 2.1, time);
-    osc2.frequency.exponentialRampToValueAtTime(freq * 0.7, time + 0.05);
+    osc2.frequency.setValueAtTime(baseFreq * 1.618, time); // Golden ratio harmonic
+    osc2.frequency.exponentialRampToValueAtTime(baseFreq * 0.618, time + 0.1);
 
-    // Sharp click component
-    const osc3 = ctx.createOscillator();
-    osc3.type = 'square';
-    osc3.frequency.setValueAtTime(freq * 4, time);
+    // Sharp metallic attack (the "clink")
+    const noiseOsc = ctx.createOscillator();
+    noiseOsc.type = 'square';
+    noiseOsc.frequency.setValueAtTime(baseFreq * 8, time);
+    
+    // Main envelope - quick attack, medium decay
+    const mainGain = ctx.createGain();
+    mainGain.gain.setValueAtTime(0.001, time);
+    mainGain.gain.exponentialRampToValueAtTime(volume * 0.6, time + 0.002);
+    mainGain.gain.exponentialRampToValueAtTime(volume * 0.3, time + 0.02);
+    mainGain.gain.exponentialRampToValueAtTime(0.001, time + 0.18);
 
-    // Main gain envelope
-    const gain = ctx.createGain();
-    gain.gain.setValueAtTime(0.001, time);
-    gain.gain.exponentialRampToValueAtTime(0.4, time + 0.005);
-    gain.gain.exponentialRampToValueAtTime(0.001, time + 0.12);
+    // Attack envelope for the clink
+    const attackGain = ctx.createGain();
+    attackGain.gain.setValueAtTime(volume * 0.4, time);
+    attackGain.gain.exponentialRampToValueAtTime(0.001, time + 0.008);
 
-    // Click envelope
-    const clickGain = ctx.createGain();
-    clickGain.gain.setValueAtTime(0.2, time);
-    clickGain.gain.exponentialRampToValueAtTime(0.001, time + 0.01);
+    // Bandpass filter to isolate metallic frequencies
+    const bp = ctx.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.frequency.setValueAtTime(baseFreq * 1.2, time);
+    bp.Q.value = 8; // Narrow band for metallic quality
 
-    // High-pass for metallic brightness
+    // High-pass for brightness
     const hp = ctx.createBiquadFilter();
     hp.type = 'highpass';
-    hp.frequency.value = 400;
+    hp.frequency.value = 600;
 
-    // Panning
+    // Slight reverb effect using delay
+    const delay = ctx.createDelay(0.05);
+    delay.delayTime.value = 0.01 + Math.random() * 0.02;
+    const delayGain = ctx.createGain();
+    delayGain.gain.value = 0.15;
+
+    // Stereo panning
     const panner = (ctx as any).createStereoPanner ? (ctx as any).createStereoPanner() : null;
     if (panner) panner.pan.setValueAtTime(pan, time);
 
-    // Connect everything
-    osc1.connect(gain);
-    osc2.connect(gain);
-    osc3.connect(clickGain);
+    // Connect the audio graph
+    osc1.connect(mainGain);
+    osc2.connect(mainGain);
+    noiseOsc.connect(attackGain);
     
-    gain.connect(hp);
-    clickGain.connect(hp);
+    mainGain.connect(bp);
+    attackGain.connect(bp);
+    bp.connect(hp);
+    
+    // Add some reverb
+    hp.connect(delay);
+    delay.connect(delayGain);
     
     if (panner) {
       hp.connect(panner);
+      delayGain.connect(panner);
       panner.connect(ctx.destination);
     } else {
       hp.connect(ctx.destination);
+      delayGain.connect(ctx.destination);
     }
 
-    // Start and stop
+    // Start and stop oscillators
     osc1.start(time);
-    osc1.stop(time + 0.15);
+    osc1.stop(time + 0.2);
     osc2.start(time);
-    osc2.stop(time + 0.08);
-    osc3.start(time);
-    osc3.stop(time + 0.015);
+    osc2.stop(time + 0.12);
+    noiseOsc.start(time);
+    noiseOsc.stop(time + 0.01);
   };
 
   const playCoinSpill = () => {
@@ -83,13 +105,14 @@ export const useCoinSound = () => {
     if (!ctx) return;
     const now = ctx.currentTime;
     
-    // Rapid sequence of coin clinks like spilling coins
-    const clinks = 8 + Math.floor(Math.random() * 4);
-    for (let i = 0; i < clinks; i++) {
-      const t = now + (i * 0.04) + Math.random() * 0.03; // ~40ms apart with variation
-      const pitch = Math.random(); // random pitch variation
-      const pan = -0.6 + Math.random() * 1.2; // spread across stereo field
-      playMetallicClink(t, pitch, pan);
+    // Simulate coins hitting and bouncing with realistic timing
+    const coinHits = 6 + Math.floor(Math.random() * 4);
+    for (let i = 0; i < coinHits; i++) {
+      const t = now + (i * 0.06) + Math.random() * 0.04; // Staggered hits
+      const pitch = 0.3 + Math.random() * 0.7; // Varied pitch for different coins
+      const volume = 0.3 + Math.random() * 0.2; // Varied volume
+      const pan = -0.7 + Math.random() * 1.4; // Spread across stereo field
+      createRealisticCoinSound(t, pitch, volume, pan);
     }
   };
 
