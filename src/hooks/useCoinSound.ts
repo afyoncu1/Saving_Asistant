@@ -2,105 +2,94 @@ import { useRef } from 'react';
 
 export const useCoinSound = () => {
   const ctxRef = useRef<AudioContext | null>(null);
-  const compressorRef = useRef<DynamicsCompressorNode | null>(null);
 
   const getCtx = () => {
     if (typeof window === 'undefined') return null as any;
     if (!ctxRef.current) {
       const AC: any = (window as any).AudioContext || (window as any).webkitAudioContext;
       ctxRef.current = new AC();
-      compressorRef.current = ctxRef.current.createDynamicsCompressor();
-      compressorRef.current.threshold.value = -24;
-      compressorRef.current.knee.value = 30;
-      compressorRef.current.ratio.value = 12;
-      compressorRef.current.attack.value = 0.003;
-      compressorRef.current.release.value = 0.25;
-      compressorRef.current.connect(ctxRef.current.destination);
     }
     return ctxRef.current;
   };
 
-  const noiseBufferRef = useRef<AudioBuffer | null>(null);
-  const getNoiseBuffer = (ctx: AudioContext) => {
-    if (!noiseBufferRef.current) {
-      const length = ctx.sampleRate * 0.1;
-      const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < length; i++) {
-        data[i] = (Math.random() * 2 - 1) * (1 - i / length); // short burst with quick decay
-      }
-      noiseBufferRef.current = buffer;
-    }
-    return noiseBufferRef.current;
-  };
-
-  const playTink = (time: number, pan: number) => {
+  const playMetallicClink = (time: number, pitch: number, pan: number) => {
     const ctx = getCtx();
     if (!ctx) return;
 
-    const destination: AudioNode = compressorRef.current ?? ctx.destination;
+    // Primary metallic tone
+    const osc1 = ctx.createOscillator();
+    osc1.type = 'triangle';
+    const freq = 800 + pitch * 600; // 800-1400 Hz range
+    osc1.frequency.setValueAtTime(freq, time);
+    osc1.frequency.exponentialRampToValueAtTime(freq * 0.3, time + 0.08);
 
-    // Metallic ping
-    const osc = ctx.createOscillator();
-    osc.type = 'triangle';
-    const baseFreq = 1500 + Math.random() * 1400; // 1.5k - 2.9k
-    osc.frequency.setValueAtTime(baseFreq, time);
-    osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.6, time + 0.12);
+    // Harmonic overtone
+    const osc2 = ctx.createOscillator();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(freq * 2.1, time);
+    osc2.frequency.exponentialRampToValueAtTime(freq * 0.7, time + 0.05);
 
-    const band = ctx.createBiquadFilter();
-    band.type = 'bandpass';
-    band.frequency.setValueAtTime(1800 + Math.random() * 800, time);
-    band.Q.value = 10;
+    // Sharp click component
+    const osc3 = ctx.createOscillator();
+    osc3.type = 'square';
+    osc3.frequency.setValueAtTime(freq * 4, time);
 
+    // Main gain envelope
     const gain = ctx.createGain();
-    gain.gain.setValueAtTime(0.0001, time);
-    gain.gain.exponentialRampToValueAtTime(0.25, time + 0.01);
-    gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.22);
+    gain.gain.setValueAtTime(0.001, time);
+    gain.gain.exponentialRampToValueAtTime(0.4, time + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.001, time + 0.12);
 
+    // Click envelope
+    const clickGain = ctx.createGain();
+    clickGain.gain.setValueAtTime(0.2, time);
+    clickGain.gain.exponentialRampToValueAtTime(0.001, time + 0.01);
+
+    // High-pass for metallic brightness
+    const hp = ctx.createBiquadFilter();
+    hp.type = 'highpass';
+    hp.frequency.value = 400;
+
+    // Panning
     const panner = (ctx as any).createStereoPanner ? (ctx as any).createStereoPanner() : null;
     if (panner) panner.pan.setValueAtTime(pan, time);
 
-    // Highpassed noise click
-    const noiseSrc = ctx.createBufferSource();
-    noiseSrc.buffer = getNoiseBuffer(ctx);
-    const hp = ctx.createBiquadFilter();
-    hp.type = 'highpass';
-    hp.frequency.value = 1000 + Math.random() * 600;
-    const ng = ctx.createGain();
-    ng.gain.setValueAtTime(0.12, time);
-    ng.gain.exponentialRampToValueAtTime(0.0001, time + 0.08);
-
-    // Wire up
-    osc.connect(band);
-    band.connect(gain);
+    // Connect everything
+    osc1.connect(gain);
+    osc2.connect(gain);
+    osc3.connect(clickGain);
+    
+    gain.connect(hp);
+    clickGain.connect(hp);
+    
     if (panner) {
-      gain.connect(panner);
-      panner.connect(destination);
-      noiseSrc.connect(hp);
-      hp.connect(ng);
-      ng.connect(panner);
+      hp.connect(panner);
+      panner.connect(ctx.destination);
     } else {
-      gain.connect(destination);
-      noiseSrc.connect(hp);
-      hp.connect(ng);
-      ng.connect(destination);
+      hp.connect(ctx.destination);
     }
 
-    osc.start(time);
-    osc.stop(time + 0.25);
-    noiseSrc.start(time);
-    noiseSrc.stop(time + 0.1);
+    // Start and stop
+    osc1.start(time);
+    osc1.stop(time + 0.15);
+    osc2.start(time);
+    osc2.stop(time + 0.08);
+    osc3.start(time);
+    osc3.stop(time + 0.015);
   };
 
   const playCoinSpill = () => {
     const ctx = getCtx();
     if (!ctx) return;
     const now = ctx.currentTime;
-    const hits = 14 + Math.floor(Math.random() * 6);
-    for (let i = 0; i < hits; i++) {
-      const t = now + Math.random() * 0.65; // spread over ~650ms
-      const pan = -0.8 + Math.random() * 1.6; // -0.8 to 0.8
-      playTink(t, pan);
+    
+    // Rapid sequence of coin clinks like spilling coins
+    const clinks = 8 + Math.floor(Math.random() * 4);
+    for (let i = 0; i < clinks; i++) {
+      const t = now + (i * 0.04) + Math.random() * 0.03; // ~40ms apart with variation
+      const pitch = Math.random(); // random pitch variation
+      const pan = -0.6 + Math.random() * 1.2; // spread across stereo field
+      playMetallicClink(t, pitch, pan);
     }
   };
 

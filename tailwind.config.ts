@@ -144,17 +144,20 @@ export default {
 				},
 				'coin-arc': {
 					'0%': {
-						transform: 'translate(var(--x-start, 0px), 20px) scale(var(--scale, 1)) rotate(0deg)',
+						transform: 'translate(var(--x-start, 0px), 0px) scale(var(--scale, 1)) rotate(0deg)',
 						opacity: '0'
 					},
-					'15%': {
+					'10%': {
 						opacity: '1'
 					},
-					'60%': {
-						transform: 'translate(var(--x-mid, 0px), -120px) scale(var(--scale, 1)) rotate(360deg)'
+					'30%': {
+						transform: 'translate(var(--x-mid, 0px), -80px) scale(var(--scale, 1)) rotate(180deg)'
+					},
+					'70%': {
+						transform: 'translate(var(--x-end, 0px), -120px) scale(var(--scale, 1)) rotate(360deg)'
 					},
 					'100%': {
-						transform: 'translate(var(--x-end, 0px), -40px) scale(var(--scale, 1)) rotate(540deg)',
+						transform: 'translate(var(--x-end, 0px), -60px) scale(var(--scale, 1)) rotate(540deg)',
 						opacity: '0'
 					}
 				}
