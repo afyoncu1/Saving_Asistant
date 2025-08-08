@@ -151,13 +151,13 @@ export default {
 						opacity: '1'
 					},
 					'40%': {
-						transform: 'translate(var(--x-mid, 0px), 50px) scale(var(--scale, 1)) rotate(180deg)'
+						transform: 'translate(var(--x-mid, 0px), 200px) scale(var(--scale, 1)) rotate(180deg)'
 					},
 					'80%': {
-						transform: 'translate(var(--x-end, 0px), 200px) scale(var(--scale, 1)) rotate(360deg)'
+						transform: 'translate(var(--x-end, 0px), 600px) scale(var(--scale, 1)) rotate(360deg)'
 					},
 					'100%': {
-						transform: 'translate(var(--x-end, 0px), 300px) scale(var(--scale, 1)) rotate(540deg)',
+						transform: 'translate(var(--x-end, 0px), 100vh) scale(var(--scale, 1)) rotate(540deg)',
 						opacity: '0'
 					}
 				}

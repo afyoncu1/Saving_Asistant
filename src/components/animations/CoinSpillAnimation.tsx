@@ -35,7 +35,7 @@ const CoinSpillAnimation: React.FC<CoinSpillAnimationProps> = ({ active = true }
   if (!active) return null;
 
   return (
-    <div className="absolute inset-0 pointer-events-none">
+    <div className="fixed inset-0 pointer-events-none z-50">
       {coins.map(c => (
         <div
           key={c.id}
