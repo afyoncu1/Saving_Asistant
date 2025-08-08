@@ -16,25 +16,24 @@ export const useCoinSound = () => {
     const ctx = getCtx();
     if (!ctx) return;
 
-    // High-pitched ringing sound (like a bell or chime)
+    // Short, instant coin sound
     const osc = ctx.createOscillator();
     osc.type = 'sine';
     osc.frequency.setValueAtTime(2000, time); // High frequency
-    osc.frequency.exponentialRampToValueAtTime(1800, time + 1.5); // Slight pitch decay
+    osc.frequency.exponentialRampToValueAtTime(1900, time + 0.2); // Quick pitch decay
 
-    // Long decay envelope
+    // Short, punchy envelope
     const gain = ctx.createGain();
     gain.gain.setValueAtTime(0, time);
-    gain.gain.exponentialRampToValueAtTime(volume, time + 0.01); // Quick attack
-    gain.gain.exponentialRampToValueAtTime(volume * 0.3, time + 0.5); // Sustain
-    gain.gain.exponentialRampToValueAtTime(0.001, time + 2.0); // Long decay
+    gain.gain.exponentialRampToValueAtTime(volume, time + 0.005); // Very quick attack
+    gain.gain.exponentialRampToValueAtTime(0.001, time + 0.3); // Quick decay
 
     // Connect and play
     osc.connect(gain);
     gain.connect(ctx.destination);
     
     osc.start(time);
-    osc.stop(time + 2.0);
+    osc.stop(time + 0.3);
   };
 
   const playCoinSpill = () => {
