@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { encryptData, decryptData } from '@/lib/security';
 
 export interface WorkProfile {
   monthlySalary: number;
@@ -16,9 +17,15 @@ export const useWorkProfile = () => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
-        setWorkProfile(JSON.parse(saved));
+        // Decrypt the stored data
+        const decrypted = decryptData<WorkProfile>(saved);
+        if (decrypted) {
+          setWorkProfile(decrypted);
+        }
       } catch (error) {
         console.error('Error loading work profile:', error);
+        // Clear corrupted data
+        localStorage.removeItem(STORAGE_KEY);
       }
     }
   }, []);
@@ -33,7 +40,13 @@ export const useWorkProfile = () => {
     };
 
     setWorkProfile(fullProfile);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(fullProfile));
+    // Encrypt the data before storing
+    try {
+      const encrypted = encryptData(fullProfile);
+      localStorage.setItem(STORAGE_KEY, encrypted);
+    } catch (error) {
+      console.error('Error saving work profile:', error);
+    }
   };
 
   const clearWorkProfile = () => {
