@@ -3,13 +3,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Clock, AlertCircle, Settings } from 'lucide-react';
+import { Clock, AlertCircle, Settings, X } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useWorkProfile, WorkProfile } from '@/hooks/useWorkProfile';
 import { Link } from 'react-router-dom';
 import CoinSpillAnimation from '@/components/animations/CoinSpillAnimation';
 import { useCoinSound } from '@/hooks/useCoinSound';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 
 interface ProductCost {
   price: number;
@@ -37,7 +36,7 @@ const ProductCalculator: React.FC = () => {
   const [productPrice, setProductPrice] = useState<number>(0);
   const [productCost, setProductCost] = useState<ProductCost | null>(null);
   const [showCoins, setShowCoins] = useState<boolean>(false);
-  const [showPurchaseDialog, setShowPurchaseDialog] = useState<boolean>(false);
+  const [showPurchaseQuestion, setShowPurchaseQuestion] = useState<boolean>(false);
 
   const { playCoinSpill } = useCoinSound();
 
@@ -56,16 +55,16 @@ const ProductCalculator: React.FC = () => {
       setShowCoins(true);
       playCoinSpill();
       
-      // Hide coins after animation and show purchase dialog
+      // Hide coins after animation and show purchase question
       setTimeout(() => {
         setShowCoins(false);
-        setShowPurchaseDialog(true);
+        setShowPurchaseQuestion(true);
       }, 1600);
     }
   };
 
   const handlePurchaseResponse = (bought: boolean) => {
-    setShowPurchaseDialog(false);
+    setShowPurchaseQuestion(false);
     // You could add analytics or other logic here based on the response
     console.log(`User ${bought ? 'bought' : 'did not buy'} the product for $${productPrice}`);
   };
@@ -264,25 +263,46 @@ const ProductCalculator: React.FC = () => {
           </div>
         )}
 
-        {/* Purchase Dialog */}
-        <AlertDialog open={showPurchaseDialog} onOpenChange={setShowPurchaseDialog}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Did you buy it?</AlertDialogTitle>
-              <AlertDialogDescription>
-                After seeing that this ${productPrice} item costs you {productCost && workProfile && formatTime(productCost.hoursNeeded, workProfile)} of work time, did you decide to purchase it?
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel onClick={() => handlePurchaseResponse(false)}>
-                No
-              </AlertDialogCancel>
-              <AlertDialogAction onClick={() => handlePurchaseResponse(true)}>
-                Yes
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        {/* Optional Purchase Question */}
+        {showPurchaseQuestion && productCost && workProfile && (
+          <Card className="border-primary/20 flex-shrink-0 animate-in slide-in-from-bottom-3 duration-300">
+            <CardContent className="p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex-1">
+                  <h4 className="font-semibold text-sm mb-1">Did you buy it?</h4>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    After seeing this ${productPrice} item costs {formatTime(productCost.hoursNeeded, workProfile)} of work time
+                  </p>
+                  <div className="flex gap-2">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      onClick={() => handlePurchaseResponse(false)}
+                      className="text-xs px-3"
+                    >
+                      No
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      onClick={() => handlePurchaseResponse(true)}
+                      className="text-xs px-3"
+                    >
+                      Yes
+                    </Button>
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowPurchaseQuestion(false)}
+                  className="h-6 w-6 p-0 hover:bg-muted"
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );
