@@ -9,6 +9,7 @@ import { useWorkProfile, WorkProfile } from '@/hooks/useWorkProfile';
 import { Link } from 'react-router-dom';
 import CoinSpillAnimation from '@/components/animations/CoinSpillAnimation';
 import { useCoinSound } from '@/hooks/useCoinSound';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 
 interface ProductCost {
   price: number;
@@ -36,6 +37,7 @@ const ProductCalculator: React.FC = () => {
   const [productPrice, setProductPrice] = useState<number>(0);
   const [productCost, setProductCost] = useState<ProductCost | null>(null);
   const [showCoins, setShowCoins] = useState<boolean>(false);
+  const [showPurchaseDialog, setShowPurchaseDialog] = useState<boolean>(false);
 
   const { playCoinSpill } = useCoinSound();
 
@@ -54,9 +56,18 @@ const ProductCalculator: React.FC = () => {
       setShowCoins(true);
       playCoinSpill();
       
-      // Hide coins after animation
-      setTimeout(() => setShowCoins(false), 1600);
+      // Hide coins after animation and show purchase dialog
+      setTimeout(() => {
+        setShowCoins(false);
+        setShowPurchaseDialog(true);
+      }, 1600);
     }
+  };
+
+  const handlePurchaseResponse = (bought: boolean) => {
+    setShowPurchaseDialog(false);
+    // You could add analytics or other logic here based on the response
+    console.log(`User ${bought ? 'bought' : 'did not buy'} the product for $${productPrice}`);
   };
 
   const formatTime = (hours: number, workProfile: WorkProfile) => {
@@ -252,6 +263,26 @@ const ProductCalculator: React.FC = () => {
             ))}
           </div>
         )}
+
+        {/* Purchase Dialog */}
+        <AlertDialog open={showPurchaseDialog} onOpenChange={setShowPurchaseDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Did you buy it?</AlertDialogTitle>
+              <AlertDialogDescription>
+                After seeing that this ${productPrice} item costs you {productCost && workProfile && formatTime(productCost.hoursNeeded, workProfile)} of work time, did you decide to purchase it?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => handlePurchaseResponse(false)}>
+                No
+              </AlertDialogCancel>
+              <AlertDialogAction onClick={() => handlePurchaseResponse(true)}>
+                Yes
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );
