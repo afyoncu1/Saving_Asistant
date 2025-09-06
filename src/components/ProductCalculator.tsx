@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Clock, AlertCircle, Settings, X } from 'lucide-react';
+import { Clock, AlertCircle, Settings, X, ArrowLeft } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useWorkProfile, WorkProfile } from '@/hooks/useWorkProfile';
 import { Link } from 'react-router-dom';
@@ -39,6 +39,7 @@ const ProductCalculator: React.FC = () => {
   const [productCost, setProductCost] = useState<ProductCost | null>(null);
   const [showCoins, setShowCoins] = useState<boolean>(false);
   const [showPurchaseQuestion, setShowPurchaseQuestion] = useState<boolean>(false);
+  const [showFinancialJourney, setShowFinancialJourney] = useState<boolean>(false);
 
   const { playCoinSpill } = useCoinSound();
   const { totals, loading: spendingLoading, recordDecision } = useSpendingSavings();
@@ -70,6 +71,17 @@ const ProductCalculator: React.FC = () => {
   const handlePurchaseResponse = (bought: boolean) => {
     setShowPurchaseQuestion(false);
     recordDecision(productPrice, bought);
+  };
+
+  const resetCalculation = () => {
+    setProductCost(null);
+    setShowPurchaseQuestion(false);
+    setShowFinancialJourney(false);
+    setProductPrice(0);
+  };
+
+  const viewFinancialJourney = () => {
+    setShowFinancialJourney(true);
   };
 
   const formatTime = (hours: number, workProfile: WorkProfile) => {
@@ -232,6 +244,26 @@ const ProductCalculator: React.FC = () => {
                     )}
                   </p>
                 </div>
+
+                {/* Navigation Buttons */}
+                <div className="flex gap-2 mt-4">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={resetCalculation}
+                    className="flex-1 text-xs"
+                  >
+                    New Calculation
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={viewFinancialJourney}
+                    className="flex-1 text-xs"
+                  >
+                    View Journey
+                  </Button>
+                </div>
               </div>
             )}
           </CardContent>
@@ -317,9 +349,22 @@ const ProductCalculator: React.FC = () => {
           </Card>
         )}
 
-        {/* Spending & Savings Totals - Only show when no calculation results */}
-        {!productCost && (
+        {/* Spending & Savings Totals - Show when no calculation results OR when explicitly requested */}
+        {(!productCost || showFinancialJourney) && (
           <Card className="mt-6">
+            {showFinancialJourney && (
+              <div className="flex justify-end p-2 border-b">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowFinancialJourney(false)}
+                  className="text-xs px-2"
+                >
+                  <X className="h-3 w-3 mr-1" />
+                  Close
+                </Button>
+              </div>
+            )}
             <CardHeader>
               <CardTitle className="text-lg">Your Financial Journey</CardTitle>
             </CardHeader>
