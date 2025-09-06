@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import CoinSpillAnimation from '@/components/animations/CoinSpillAnimation';
 import { useCoinSound } from '@/hooks/useCoinSound';
 import { useSpendingSavings } from '@/hooks/useSpendingSavings';
+import { useAuth } from '@/hooks/useAuth';
 
 interface ProductCost {
   price: number;
@@ -41,6 +42,7 @@ const ProductCalculator: React.FC = () => {
 
   const { playCoinSpill } = useCoinSound();
   const { totals, loading: spendingLoading, recordDecision } = useSpendingSavings();
+  const { user, signOut } = useAuth();
 
   const calculateProductCost = () => {
     if (productPrice > 0 && workProfile?.hourlyRate) {
@@ -90,20 +92,30 @@ const ProductCalculator: React.FC = () => {
       <div className="h-full max-w-md mx-auto flex flex-col space-y-4">
         {/* Header */}
         <div className="text-center space-y-1 flex-shrink-0">
-          <div className="flex items-center justify-center gap-3">
-            <img 
-              src="/lovable-uploads/6d15c0f9-f3ec-4b49-894a-4b5a55ff860b.png" 
-              alt="Saving Assistant Logo" 
-              className="h-16 w-16 object-contain rounded-lg"
-              style={{ 
-                filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.1))',
-                mixBlendMode: 'multiply'
-              }}
-            />
-            <h1 className="text-2xl font-bold text-primary">Saving Assistant</h1>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center justify-center gap-3 flex-1">
+              <img 
+                src="/lovable-uploads/6d15c0f9-f3ec-4b49-894a-4b5a55ff860b.png" 
+                alt="Saving Assistant Logo" 
+                className="h-16 w-16 object-contain rounded-lg"
+                style={{ 
+                  filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.1))',
+                  mixBlendMode: 'multiply'
+                }}
+              />
+              <h1 className="text-2xl font-bold text-primary">Saving Assistant</h1>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={signOut}
+              className="text-muted-foreground hover:text-foreground"
+            >
+              Sign Out
+            </Button>
           </div>
           <p className="text-muted-foreground text-sm">
-            How much work time does it cost?
+            Welcome back, {user?.email}! How much work time does it cost?
           </p>
         </div>
 
