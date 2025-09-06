@@ -305,36 +305,38 @@ const ProductCalculator: React.FC = () => {
           </Card>
         )}
 
-        {/* Spending & Savings Totals */}
-        <Card className="mt-6">
-          <CardHeader>
-            <CardTitle className="text-lg">Your Financial Journey</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {spendingLoading ? (
-              <div className="text-center text-muted-foreground">Loading your totals...</div>
-            ) : (
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center p-4 rounded-lg bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800">
-                  <div className="text-2xl font-bold text-red-600 dark:text-red-400">
-                    ${totals.totalSpent.toFixed(2)}
+        {/* Spending & Savings Totals - Only show when no calculation results */}
+        {!productCost && (
+          <Card className="mt-6">
+            <CardHeader>
+              <CardTitle className="text-lg">Your Financial Journey</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {spendingLoading ? (
+                <div className="text-center text-muted-foreground">Loading your totals...</div>
+              ) : (
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center p-4 rounded-lg bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800">
+                    <div className="text-2xl font-bold text-red-600 dark:text-red-400">
+                      ${totals.totalSpent.toFixed(2)}
+                    </div>
+                    <div className="text-sm text-red-700 dark:text-red-300 font-medium">
+                      Total Spent
+                    </div>
                   </div>
-                  <div className="text-sm text-red-700 dark:text-red-300 font-medium">
-                    Total Spent
+                  <div className="text-center p-4 rounded-lg bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800">
+                    <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                      ${totals.totalSaved.toFixed(2)}
+                    </div>
+                    <div className="text-sm text-green-700 dark:text-green-300 font-medium">
+                      Total Saved
+                    </div>
                   </div>
                 </div>
-                <div className="text-center p-4 rounded-lg bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800">
-                  <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-                    ${totals.totalSaved.toFixed(2)}
-                  </div>
-                  <div className="text-sm text-green-700 dark:text-green-300 font-medium">
-                    Total Saved
-                  </div>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+              )}
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );
