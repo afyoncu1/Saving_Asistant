@@ -100,8 +100,8 @@ const ProductCalculator: React.FC = () => {
   };
 
   return (
-    <div className="h-screen bg-background p-3 overflow-hidden relative">
-      <div className="h-full max-w-md mx-auto flex flex-col space-y-4">
+    <div className={`min-h-screen bg-background p-3 relative ${showFinancialJourney ? 'overflow-y-auto' : 'h-screen overflow-hidden'}`}>
+      <div className={`max-w-md mx-auto flex flex-col space-y-4 ${showFinancialJourney ? 'min-h-full' : 'h-full'}`}>
         {/* Header */}
         <div className="text-center space-y-1 flex-shrink-0">
           <div className="flex items-center justify-between">
