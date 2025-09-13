@@ -40,9 +40,10 @@ const ProductCalculator: React.FC = () => {
   const [showCoins, setShowCoins] = useState<boolean>(false);
   const [showPurchaseQuestion, setShowPurchaseQuestion] = useState<boolean>(false);
   const [showFinancialJourney, setShowFinancialJourney] = useState<boolean>(false);
+  const [showAllMonths, setShowAllMonths] = useState<boolean>(false);
 
   const { playCoinSpill } = useCoinSound();
-  const { totals, loading: spendingLoading, recordDecision } = useSpendingSavings();
+  const { currentMonthTotals, totals, monthlyData, loading: spendingLoading, recordDecision, getMonthName, getCurrentMonth } = useSpendingSavings();
   const { user, signOut } = useAuth();
 
   const calculateProductCost = () => {
@@ -81,6 +82,7 @@ const ProductCalculator: React.FC = () => {
     setProductCost(null);
     setShowPurchaseQuestion(false);
     setShowFinancialJourney(false);
+    setShowAllMonths(false);
     setProductPrice(0);
   };
 
@@ -370,29 +372,70 @@ const ProductCalculator: React.FC = () => {
               </div>
             )}
             <CardHeader>
-              <CardTitle className="text-lg">Your Financial Journey</CardTitle>
+              <CardTitle className="text-lg">
+                {showAllMonths ? 'All Time Journey' : `${getMonthName(getCurrentMonth().month)} ${getCurrentMonth().year}`}
+              </CardTitle>
+              {!showAllMonths && (
+                <p className="text-sm text-muted-foreground">Your financial decisions this month</p>
+              )}
             </CardHeader>
             <CardContent>
               {spendingLoading ? (
                 <div className="text-center text-muted-foreground">Loading your totals...</div>
               ) : (
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center p-4 rounded-lg bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800">
-                    <div className="text-2xl font-bold text-red-600 dark:text-red-400">
-                      ${totals.totalSpent.toFixed(2)}
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="text-center p-4 rounded-lg bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800">
+                      <div className="text-2xl font-bold text-red-600 dark:text-red-400">
+                        ${showAllMonths ? totals.totalSpent.toFixed(2) : currentMonthTotals.totalSpent.toFixed(2)}
+                      </div>
+                      <div className="text-sm text-red-700 dark:text-red-300 font-medium">
+                        Total Spent
+                      </div>
                     </div>
-                    <div className="text-sm text-red-700 dark:text-red-300 font-medium">
-                      Total Spent
+                    <div className="text-center p-4 rounded-lg bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800">
+                      <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                        ${showAllMonths ? totals.totalSaved.toFixed(2) : currentMonthTotals.totalSaved.toFixed(2)}
+                      </div>
+                      <div className="text-sm text-green-700 dark:text-green-300 font-medium">
+                        Total Saved
+                      </div>
                     </div>
                   </div>
-                  <div className="text-center p-4 rounded-lg bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800">
-                    <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-                      ${totals.totalSaved.toFixed(2)}
-                    </div>
-                    <div className="text-sm text-green-700 dark:text-green-300 font-medium">
-                      Total Saved
-                    </div>
+
+                  {/* Toggle button for all months view */}
+                  <div className="flex justify-center">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowAllMonths(!showAllMonths)}
+                      className="text-xs"
+                    >
+                      {showAllMonths ? 'Show This Month' : 'View All Months'}
+                    </Button>
                   </div>
+
+                  {/* Monthly breakdown when showing all months */}
+                  {showAllMonths && monthlyData.length > 0 && (
+                    <div className="space-y-2 max-h-60 overflow-y-auto">
+                      <h4 className="font-semibold text-sm mb-2">Monthly Breakdown:</h4>
+                      {monthlyData.map((month, index) => (
+                        <div key={index} className="flex justify-between items-center p-2 rounded bg-muted">
+                          <span className="text-sm font-medium">
+                            {getMonthName(month.month)} {month.year}
+                          </span>
+                          <div className="flex gap-4 text-xs">
+                            <span className="text-red-600 dark:text-red-400">
+                              -${Number(month.total_spent).toFixed(2)}
+                            </span>
+                            <span className="text-green-600 dark:text-green-400">
+                              +${Number(month.total_saved).toFixed(2)}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </CardContent>
