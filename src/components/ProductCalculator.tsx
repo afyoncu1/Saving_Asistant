@@ -64,7 +64,7 @@ const ProductCalculator: React.FC = () => {
       setTimeout(() => {
         setShowCoins(false);
         setShowPurchaseQuestion(true);
-      }, 1600);
+      }, 10000);
     }
   };
 
@@ -311,26 +311,26 @@ const ProductCalculator: React.FC = () => {
         {/* Optional Purchase Question */}
         {showPurchaseQuestion && productCost && workProfile && (
           <Card className="border-primary/20 flex-shrink-0 animate-in slide-in-from-bottom-3 duration-300">
-            <CardContent className="p-4">
-              <div className="flex items-start justify-between gap-3">
+            <CardContent className="p-2">
+              <div className="flex items-start justify-between gap-2">
                 <div className="flex-1">
-                  <h4 className="font-semibold text-sm mb-1">Did you buy it?</h4>
-                  <p className="text-xs text-muted-foreground mb-3">
-                    After seeing this ${productPrice} item costs {formatTime(productCost.hoursNeeded, workProfile)} of work time
+                  <h4 className="font-medium text-xs mb-1">Did you buy it?</h4>
+                  <p className="text-xs text-muted-foreground mb-2">
+                    ${productPrice} = {formatTime(productCost.hoursNeeded, workProfile)}
                   </p>
-                  <div className="flex gap-2">
+                  <div className="flex gap-1">
                     <Button 
                       size="sm" 
                       variant="outline" 
                       onClick={() => handlePurchaseResponse(false)}
-                      className="text-xs px-3"
+                      className="text-xs px-2 py-1 h-6"
                     >
                       No
                     </Button>
                     <Button 
                       size="sm" 
                       onClick={() => handlePurchaseResponse(true)}
-                      className="text-xs px-3"
+                      className="text-xs px-2 py-1 h-6"
                     >
                       Yes
                     </Button>
@@ -340,9 +340,9 @@ const ProductCalculator: React.FC = () => {
                   variant="ghost"
                   size="sm"
                   onClick={() => setShowPurchaseQuestion(false)}
-                  className="h-6 w-6 p-0 hover:bg-muted"
+                  className="h-4 w-4 p-0 hover:bg-muted"
                 >
-                  <X className="h-3 w-3" />
+                  <X className="h-2 w-2" />
                 </Button>
               </div>
             </CardContent>
