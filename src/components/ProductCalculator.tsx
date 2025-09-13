@@ -68,7 +68,7 @@ const ProductCalculator: React.FC = () => {
       // Show purchase question later
       setTimeout(() => {
         setShowPurchaseQuestion(true);
-      }, 12000);
+      }, 5000);
     }
   };
 
