@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      monthly_summaries: {
+        Row: {
+          created_at: string
+          id: string
+          month: number
+          total_saved: number
+          total_spent: number
+          updated_at: string
+          user_id: string
+          year: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          month: number
+          total_saved?: number
+          total_spent?: number
+          updated_at?: string
+          user_id: string
+          year: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          month?: number
+          total_saved?: number
+          total_spent?: number
+          updated_at?: string
+          user_id?: string
+          year?: number
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -46,22 +79,28 @@ export type Database = {
           created_at: string
           decision: string
           id: string
+          month: number
           product_price: number
           user_id: string
+          year: number
         }
         Insert: {
           created_at?: string
           decision: string
           id?: string
+          month: number
           product_price: number
           user_id: string
+          year: number
         }
         Update: {
           created_at?: string
           decision?: string
           id?: string
+          month?: number
           product_price?: number
           user_id?: string
+          year?: number
         }
         Relationships: []
       }
