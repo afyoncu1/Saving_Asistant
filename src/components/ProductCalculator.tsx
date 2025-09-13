@@ -60,11 +60,15 @@ const ProductCalculator: React.FC = () => {
       setShowCoins(true);
       playCoinSpill();
       
-      // Hide coins after animation and show purchase question
+      // Hide coins after animation completes
       setTimeout(() => {
         setShowCoins(false);
+      }, 2000);
+      
+      // Show purchase question later
+      setTimeout(() => {
         setShowPurchaseQuestion(true);
-      }, 10000);
+      }, 12000);
     }
   };
 
@@ -314,8 +318,8 @@ const ProductCalculator: React.FC = () => {
             <CardContent className="p-2">
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1">
-                  <h4 className="font-medium text-xs mb-1">Did you buy it?</h4>
-                  <p className="text-xs text-muted-foreground mb-2">
+                  <h4 className="font-semibold text-sm mb-1">Did you buy it?</h4>
+                  <p className="text-sm text-muted-foreground mb-2">
                     ${productPrice} = {formatTime(productCost.hoursNeeded, workProfile)}
                   </p>
                   <div className="flex gap-1">
