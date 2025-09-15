@@ -355,91 +355,84 @@ const ProductCalculator: React.FC = () => {
           </Card>
         )}
 
-        {/* Spending & Savings Totals - Show when no calculation results OR when explicitly requested */}
-        {(!productCost || showFinancialJourney) && (
-          <Card className="mt-6">
-            {showFinancialJourney && (
-              <div className="flex justify-end p-2 border-b">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowFinancialJourney(false)}
-                  className="text-xs px-2"
-                >
-                  <X className="h-3 w-3 mr-1" />
-                  Close
-                </Button>
+        {/* Spending & Savings Totals - Compact view when financial journey requested */}
+        {showFinancialJourney && (
+          <div className="bg-muted/50 rounded-lg p-2 border border-muted-foreground/20 mt-2">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-xs font-semibold">
+                {showAllMonths ? 'All Time' : `${getMonthName(getCurrentMonth().month)} ${getCurrentMonth().year}`}
+              </h3>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowFinancialJourney(false)}
+                className="h-4 w-4 p-0 text-xs"
+              >
+                <X className="h-2 w-2" />
+              </Button>
+            </div>
+            
+            {spendingLoading ? (
+              <div className="text-center text-muted-foreground text-xs py-2">Loading...</div>
+            ) : (
+              <div className="space-y-2">
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="text-center p-2 rounded bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800">
+                    <div className="text-sm font-bold text-red-600 dark:text-red-400">
+                      ${showAllMonths ? totals.totalSpent.toFixed(0) : currentMonthTotals.totalSpent.toFixed(0)}
+                    </div>
+                    <div className="text-xs text-red-700 dark:text-red-300">
+                      Spent
+                    </div>
+                  </div>
+                  <div className="text-center p-2 rounded bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800">
+                    <div className="text-sm font-bold text-green-600 dark:text-green-400">
+                      ${showAllMonths ? totals.totalSaved.toFixed(0) : currentMonthTotals.totalSaved.toFixed(0)}
+                    </div>
+                    <div className="text-xs text-green-700 dark:text-green-300">
+                      Saved
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex justify-center">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowAllMonths(!showAllMonths)}
+                    className="text-xs h-6 px-2"
+                  >
+                    {showAllMonths ? 'This Month' : 'All Time'}
+                  </Button>
+                </div>
+
+                {showAllMonths && monthlyData.length > 0 && (
+                  <div className="space-y-1 max-h-32 overflow-y-auto">
+                    {monthlyData.slice(0, 3).map((month, index) => (
+                      <div key={index} className="flex justify-between items-center p-1 rounded bg-background/50 text-xs">
+                        <span className="font-medium">
+                          {getMonthName(month.month).slice(0, 3)} {month.year}
+                        </span>
+                        <div className="flex gap-2">
+                          <span className="text-red-600 dark:text-red-400">
+                            -${Number(month.total_spent).toFixed(0)}
+                          </span>
+                          <span className="text-green-600 dark:text-green-400">
+                            +${Number(month.total_saved).toFixed(0)}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                    {monthlyData.length > 3 && (
+                      <div className="text-center text-xs text-muted-foreground">
+                        +{monthlyData.length - 3} more months
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             )}
-            <CardHeader>
-              <CardTitle className="text-lg">
-                {showAllMonths ? 'All Time Journey' : `${getMonthName(getCurrentMonth().month)} ${getCurrentMonth().year}`}
-              </CardTitle>
-              {!showAllMonths && (
-                <p className="text-sm text-muted-foreground">Your financial decisions this month</p>
-              )}
-            </CardHeader>
-            <CardContent>
-              {spendingLoading ? (
-                <div className="text-center text-muted-foreground">Loading your totals...</div>
-              ) : (
-                <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="text-center p-4 rounded-lg bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800">
-                      <div className="text-2xl font-bold text-red-600 dark:text-red-400">
-                        ${showAllMonths ? totals.totalSpent.toFixed(2) : currentMonthTotals.totalSpent.toFixed(2)}
-                      </div>
-                      <div className="text-sm text-red-700 dark:text-red-300 font-medium">
-                        Total Spent
-                      </div>
-                    </div>
-                    <div className="text-center p-4 rounded-lg bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800">
-                      <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-                        ${showAllMonths ? totals.totalSaved.toFixed(2) : currentMonthTotals.totalSaved.toFixed(2)}
-                      </div>
-                      <div className="text-sm text-green-700 dark:text-green-300 font-medium">
-                        Total Saved
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Toggle button for all months view */}
-                  <div className="flex justify-center">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setShowAllMonths(!showAllMonths)}
-                      className="text-xs"
-                    >
-                      {showAllMonths ? 'Show This Month' : 'View All Months'}
-                    </Button>
-                  </div>
-
-                  {/* Monthly breakdown when showing all months */}
-                  {showAllMonths && monthlyData.length > 0 && (
-                    <div className="space-y-2 max-h-60 overflow-y-auto">
-                      <h4 className="font-semibold text-sm mb-2">Monthly Breakdown:</h4>
-                      {monthlyData.map((month, index) => (
-                        <div key={index} className="flex justify-between items-center p-2 rounded bg-muted">
-                          <span className="text-sm font-medium">
-                            {getMonthName(month.month)} {month.year}
-                          </span>
-                          <div className="flex gap-4 text-xs">
-                            <span className="text-red-600 dark:text-red-400">
-                              -${Number(month.total_spent).toFixed(2)}
-                            </span>
-                            <span className="text-green-600 dark:text-green-400">
-                              +${Number(month.total_saved).toFixed(2)}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-            </CardContent>
-          </Card>
+          </div>
         )}
       </div>
     </div>
