@@ -355,8 +355,8 @@ const ProductCalculator: React.FC = () => {
           </Card>
         )}
 
-        {/* Spending & Savings Totals - Compact view when financial journey requested */}
-        {showFinancialJourney && (
+        {/* Spending & Savings Totals - Show by default or when requested */}
+        {(!productCost || showFinancialJourney) && (
           <div className="bg-muted/50 rounded-lg p-2 border border-muted-foreground/20 mt-2">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-xs font-semibold">
