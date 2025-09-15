@@ -95,8 +95,15 @@ const ProductCalculator: React.FC = () => {
       const minutes = Math.round(hours * 60);
       return `${minutes} minute${minutes !== 1 ? 's' : ''}`;
     } else if (hours < 24) {
-      const wholeHours = Math.floor(hours);
-      const minutes = Math.round((hours - wholeHours) * 60);
+      let wholeHours = Math.floor(hours);
+      let minutes = Math.round((hours - wholeHours) * 60);
+      
+      // Handle case where minutes rounds to 60
+      if (minutes >= 60) {
+        wholeHours += Math.floor(minutes / 60);
+        minutes = minutes % 60;
+      }
+      
       return minutes > 0 ? `${wholeHours}h ${minutes}m` : `${wholeHours} hour${wholeHours !== 1 ? 's' : ''}`;
     } else {
       const days = Math.floor(hours / workProfile.hoursPerDay);
