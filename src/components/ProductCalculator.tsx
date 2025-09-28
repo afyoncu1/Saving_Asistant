@@ -116,19 +116,19 @@ const ProductCalculator: React.FC = () => {
     <div className={`min-h-screen bg-gradient-to-br from-background via-background to-muted/30 p-4 relative ${showFinancialJourney ? 'overflow-y-auto' : 'h-screen overflow-hidden'}`}>
       <div className={`max-w-sm mx-auto flex flex-col space-y-6 ${showFinancialJourney ? 'min-h-full' : 'h-full'}`}>
         {/* Header */}
-        <div className="text-center space-y-3 flex-shrink-0">
+        <div className="text-center space-y-4 flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-center gap-3 flex-1">
               <img 
                 src="/lovable-uploads/6d15c0f9-f3ec-4b49-894a-4b5a55ff860b.png" 
                 alt="Saving Assistant Logo" 
-                className="h-12 w-12 object-contain rounded-xl"
+                className="h-14 w-14 object-contain rounded-xl"
                 style={{ 
                   filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.1))',
                   mixBlendMode: 'multiply'
                 }}
               />
-              <h1 className="text-xl font-bold text-primary">Saving Assistant</h1>
+              <h1 className="text-2xl font-bold text-primary">💰 Saving Assistant</h1>
             </div>
             <Button
               variant="ghost"
@@ -136,33 +136,33 @@ const ProductCalculator: React.FC = () => {
               onClick={signOut}
               className="text-muted-foreground hover:text-foreground rounded-full"
             >
-              Sign Out
+              👋 Sign Out
             </Button>
           </div>
-          <div className="bg-card rounded-2xl p-4 border shadow-sm">
-            <p className="text-foreground font-medium">
-              Welcome back, {user?.email?.split('@')[0]}!
+          <div className="bg-card rounded-2xl p-5 border shadow-sm">
+            <p className="text-foreground font-bold text-lg">
+              🎉 Welcome back, {user?.email?.split('@')[0]}!
             </p>
-            <p className="text-muted-foreground text-sm mt-1">
-              Let's see what your time is worth
+            <p className="text-muted-foreground text-base mt-2">
+              ⏰ Let's see what your time is really worth
             </p>
           </div>
         </div>
 
         {/* Work Profile Status */}
         {hasProfile && workProfile && (
-          <div className="bg-card rounded-2xl p-4 border shadow-sm flex-shrink-0">
+          <div className="bg-card rounded-2xl p-5 border shadow-sm flex-shrink-0">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-bold text-primary text-lg">${workProfile.hourlyRate.toFixed(2)}</h3>
-                <p className="text-sm text-muted-foreground">
-                  per hour • {workProfile.workingDays} days • {workProfile.hoursPerDay}h/day
+                <h3 className="font-bold text-primary text-2xl">💵 ${workProfile.hourlyRate.toFixed(2)}</h3>
+                <p className="text-base text-muted-foreground mt-1">
+                  ⏰ per hour • 📅 {workProfile.workingDays} days • 🕒 {workProfile.hoursPerDay}h/day
                 </p>
               </div>
               <Link to="/profile">
-                <Button variant="outline" size="sm" className="rounded-full">
-                  <Settings className="h-4 w-4 mr-1" />
-                  Edit
+                <Button variant="outline" size="lg" className="rounded-full font-semibold">
+                  <Settings className="h-4 w-4 mr-2" />
+                  ⚙️ Edit
                 </Button>
               </Link>
             </div>
@@ -172,30 +172,30 @@ const ProductCalculator: React.FC = () => {
         {/* Product Cost Calculator */}
         <div className="bg-card rounded-2xl border shadow-sm flex-1 min-h-0 flex flex-col">
           <div className="p-6 flex-shrink-0">
-            <h2 className="text-2xl font-bold text-center mb-2">WORTH IT?</h2>
-            <p className="text-center text-muted-foreground text-sm mb-6">
-              Enter a price to see how much work time it costs
+            <h2 className="text-4xl font-bold text-center mb-3">🤔 WORTH IT?</h2>
+            <p className="text-center text-muted-foreground text-lg mb-6">
+              💸 Enter a price to see how much work time it costs
             </p>
             
             {!hasProfile && (
               <Alert className="mb-4">
                 <AlertCircle className="h-4 w-4" />
-                <AlertDescription className="flex items-center justify-between text-sm">
-                  <span>Set up your work profile first</span>
+                <AlertDescription className="flex items-center justify-between text-base">
+                  <span>⚠️ Set up your work profile first</span>
                   <Link to="/profile">
-                    <Button size="sm" className="text-xs px-3 py-1 rounded-full">Setup</Button>
+                    <Button size="sm" className="text-sm px-4 py-2 rounded-full font-semibold">🚀 Setup</Button>
                   </Link>
                 </AlertDescription>
               </Alert>
             )}
 
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="productPrice" className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-                  Purchase Price
+            <div className="space-y-5">
+              <div className="space-y-3">
+                <Label htmlFor="productPrice" className="text-base font-bold text-muted-foreground uppercase tracking-wide">
+                  💰 Purchase Price
                 </Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">$</span>
+                  <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground text-xl font-bold">$</span>
                   <Input
                     id="productPrice"
                     type="number"
@@ -204,17 +204,17 @@ const ProductCalculator: React.FC = () => {
                     disabled={!hasProfile}
                     value={productPrice || ''}
                     onChange={(e) => setProductPrice(parseFloat(e.target.value) || 0)}
-                    className="pl-8 h-12 text-lg font-medium rounded-xl border-2 focus:border-primary"
+                    className="pl-10 h-14 text-2xl font-bold rounded-xl border-2 focus:border-primary"
                   />
                 </div>
               </div>
               <Button 
                 onClick={calculateProductCost}
                 disabled={!hasProfile || productPrice <= 0}
-                className="w-full h-12 rounded-xl font-semibold text-base"
+                className="w-full h-14 rounded-xl font-bold text-lg"
                 size="lg"
               >
-                Calculate Work Time
+                🚀 Calculate Work Time
               </Button>
             </div>
           </div>
@@ -222,41 +222,41 @@ const ProductCalculator: React.FC = () => {
           {productCost && workProfile && (
             <div className="px-6 pb-6 space-y-6">
               <div className="text-center">
-                <div className="inline-flex items-center gap-2 text-muted-foreground text-sm mb-2">
-                  <Clock className="h-4 w-4" />
-                  Time at Work
+                <div className="inline-flex items-center gap-2 text-muted-foreground text-lg mb-3">
+                  <Clock className="h-5 w-5" />
+                  ⏰ Time at Work
                 </div>
-                <div className="text-3xl font-bold text-primary mb-6">
+                <div className="text-5xl font-bold text-primary mb-6">
                   {formatTime(productCost.hoursNeeded, workProfile)}
                 </div>
                 
-                <div className="bg-muted/50 rounded-2xl p-4 mb-6">
-                  <div className="flex items-center justify-center gap-2 mb-2">
-                    <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-                      <TrendingUp className="h-4 w-4 text-primary-foreground" />
+                <div className="bg-muted/50 rounded-2xl p-6 mb-8">
+                  <div className="flex items-center justify-center gap-2 mb-3">
+                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
+                      <TrendingUp className="h-6 w-6 text-primary-foreground" />
                     </div>
                   </div>
-                  <div className="text-sm text-muted-foreground">
-                    Reality Check
+                  <div className="text-lg text-muted-foreground mb-2">
+                    💡 Reality Check
                   </div>
-                  <div className="text-lg font-semibold">
-                    ${productCost.price.toFixed(2)} = {formatTime(productCost.hoursNeeded, workProfile)}
+                  <div className="text-2xl font-bold">
+                    💰 ${productCost.price.toFixed(2)} = ⏱️ {formatTime(productCost.hoursNeeded, workProfile)}
                   </div>
                 </div>
                 
-                <div className="flex gap-3">
+                <div className="flex gap-4">
                   <Button
                     variant="outline"
                     onClick={resetCalculation}
-                    className="flex-1 h-12 rounded-xl font-semibold border-2"
+                    className="flex-1 h-14 rounded-xl font-bold text-lg border-2"
                   >
-                    Don't Buy
+                    ❌ Don't Buy
                   </Button>
                   <Button
                     onClick={viewFinancialJourney}
-                    className="flex-1 h-12 rounded-xl font-semibold bg-primary hover:bg-primary/90"
+                    className="flex-1 h-14 rounded-xl font-bold text-lg bg-primary hover:bg-primary/90"
                   >
-                    Buy
+                    ✅ Buy
                   </Button>
                 </div>
               </div>
@@ -348,45 +348,45 @@ const ProductCalculator: React.FC = () => {
         {(!productCost || showFinancialJourney) && (
           <Card className="mt-3 border-primary/10">
             {showFinancialJourney && (
-              <div className="flex justify-end p-2 border-b">
+              <div className="flex justify-end p-3 border-b">
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setShowFinancialJourney(false)}
-                  className="text-xs px-2 h-6"
+                  className="text-sm px-3 h-8 font-semibold"
                 >
-                  <X className="h-3 w-3 mr-1" />
-                  Close
+                  <X className="h-4 w-4 mr-2" />
+                  ❌ Close
                 </Button>
               </div>
             )}
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm">
-                {showAllMonths ? 'All Time Journey' : `${getMonthName(getCurrentMonth().month)} ${getCurrentMonth().year}`}
+            <CardHeader className="pb-3">
+              <CardTitle className="text-xl font-bold">
+                📊 {showAllMonths ? 'All Time Journey' : `${getMonthName(getCurrentMonth().month)} ${getCurrentMonth().year}`}
               </CardTitle>
               {!showAllMonths && (
-                <CardDescription className="text-xs">Your financial decisions this month</CardDescription>
+                <CardDescription className="text-base">🎯 Your financial decisions this month</CardDescription>
               )}
             </CardHeader>
-            <CardContent className="pt-0 pb-3 space-y-3">
+            <CardContent className="pt-0 pb-4 space-y-4">
               {spendingLoading ? (
-                <div className="text-center text-muted-foreground text-xs py-2">Loading your totals...</div>
+                <div className="text-center text-muted-foreground text-base py-3">⏳ Loading your totals...</div>
               ) : (
-                <div className="space-y-3">
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="text-center p-3 rounded-lg bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800">
-                      <div className="text-lg font-bold text-red-600 dark:text-red-400">
-                        ${showAllMonths ? totals.totalSpent.toFixed(0) : currentMonthTotals.totalSpent.toFixed(0)}
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="text-center p-4 rounded-2xl bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800">
+                      <div className="text-2xl font-bold text-red-600 dark:text-red-400">
+                        💸 ${showAllMonths ? totals.totalSpent.toFixed(0) : currentMonthTotals.totalSpent.toFixed(0)}
                       </div>
-                      <div className="text-xs text-red-700 dark:text-red-300 font-medium">
+                      <div className="text-sm text-red-700 dark:text-red-300 font-bold mt-1">
                         Total Spent
                       </div>
                     </div>
-                    <div className="text-center p-3 rounded-lg bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800">
-                      <div className="text-lg font-bold text-green-600 dark:text-green-400">
-                        ${showAllMonths ? totals.totalSaved.toFixed(0) : currentMonthTotals.totalSaved.toFixed(0)}
+                    <div className="text-center p-4 rounded-2xl bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800">
+                      <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+                        💰 ${showAllMonths ? totals.totalSaved.toFixed(0) : currentMonthTotals.totalSaved.toFixed(0)}
                       </div>
-                      <div className="text-xs text-green-700 dark:text-green-300 font-medium">
+                      <div className="text-sm text-green-700 dark:text-green-300 font-bold mt-1">
                         Total Saved
                       </div>
                     </div>
@@ -395,28 +395,28 @@ const ProductCalculator: React.FC = () => {
                   <div className="flex justify-center">
                     <Button
                       variant="outline"
-                      size="sm"
+                      size="lg"
                       onClick={() => setShowAllMonths(!showAllMonths)}
-                      className="text-xs h-6 px-3"
+                      className="text-base h-10 px-6 font-semibold"
                     >
-                      {showAllMonths ? 'Show This Month' : 'View All Months'}
+                      {showAllMonths ? '📅 Show This Month' : '📈 View All Months'}
                     </Button>
                   </div>
 
                   {showAllMonths && monthlyData.length > 0 && (
-                    <div className="space-y-1 max-h-32 overflow-y-auto">
-                      <h4 className="font-semibold text-xs mb-1">Monthly Breakdown:</h4>
+                    <div className="space-y-2 max-h-40 overflow-y-auto">
+                      <h4 className="font-bold text-base mb-2">📋 Monthly Breakdown:</h4>
                       {monthlyData.map((month) => (
-                        <div key={`${month.month}-${month.year}`} className="flex justify-between items-center text-xs p-1 rounded bg-muted/30">
-                          <span className="font-medium">
-                            {getMonthName(month.month)} {month.year}
+                        <div key={`${month.month}-${month.year}`} className="flex justify-between items-center text-sm p-2 rounded-lg bg-muted/30">
+                          <span className="font-bold">
+                            📅 {getMonthName(month.month)} {month.year}
                           </span>
-                          <div className="flex gap-2">
-                            <span className="text-red-600 dark:text-red-400">
-                              -${month.total_spent.toFixed(0)}
+                          <div className="flex gap-3">
+                            <span className="text-red-600 dark:text-red-400 font-semibold">
+                              💸 -${month.total_spent.toFixed(0)}
                             </span>
-                            <span className="text-green-600 dark:text-green-400">
-                              +${month.total_saved.toFixed(0)}
+                            <span className="text-green-600 dark:text-green-400 font-semibold">
+                              💰 +${month.total_saved.toFixed(0)}
                             </span>
                           </div>
                         </div>
