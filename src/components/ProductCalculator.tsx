@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Clock, AlertCircle, Settings, X, ArrowLeft } from 'lucide-react';
+import { Clock, AlertCircle, Settings, X, ArrowLeft, TrendingUp } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useWorkProfile, WorkProfile } from '@/hooks/useWorkProfile';
 import { Link } from 'react-router-dom';
@@ -113,174 +113,156 @@ const ProductCalculator: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen bg-background p-3 relative ${showFinancialJourney ? 'overflow-y-auto' : 'h-screen overflow-hidden'}`}>
-      <div className={`max-w-md mx-auto flex flex-col space-y-4 ${showFinancialJourney ? 'min-h-full' : 'h-full'}`}>
+    <div className={`min-h-screen bg-gradient-to-br from-background via-background to-muted/30 p-4 relative ${showFinancialJourney ? 'overflow-y-auto' : 'h-screen overflow-hidden'}`}>
+      <div className={`max-w-sm mx-auto flex flex-col space-y-6 ${showFinancialJourney ? 'min-h-full' : 'h-full'}`}>
         {/* Header */}
-        <div className="text-center space-y-1 flex-shrink-0">
+        <div className="text-center space-y-3 flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-center gap-3 flex-1">
               <img 
                 src="/lovable-uploads/6d15c0f9-f3ec-4b49-894a-4b5a55ff860b.png" 
                 alt="Saving Assistant Logo" 
-                className="h-16 w-16 object-contain rounded-lg"
+                className="h-12 w-12 object-contain rounded-xl"
                 style={{ 
                   filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.1))',
                   mixBlendMode: 'multiply'
                 }}
               />
-              <h1 className="text-2xl font-bold text-primary">Saving Assistant</h1>
+              <h1 className="text-xl font-bold text-primary">Saving Assistant</h1>
             </div>
             <Button
               variant="ghost"
               size="sm"
               onClick={signOut}
-              className="text-muted-foreground hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground rounded-full"
             >
               Sign Out
             </Button>
           </div>
-          <p className="text-muted-foreground text-sm">
-            Welcome back, {user?.email}! How much work time does it cost?
-          </p>
+          <div className="bg-card rounded-2xl p-4 border shadow-sm">
+            <p className="text-foreground font-medium">
+              Welcome back, {user?.email?.split('@')[0]}!
+            </p>
+            <p className="text-muted-foreground text-sm mt-1">
+              Let's see what your time is worth
+            </p>
+          </div>
         </div>
 
         {/* Work Profile Status */}
         {hasProfile && workProfile && (
-          <Card className="border-primary/20 flex-shrink-0">
-            <CardContent className="p-3">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="font-semibold text-primary text-sm">You earn ${workProfile.hourlyRate.toFixed(2)}/hour</h3>
-                  <p className="text-xs text-muted-foreground">
-                    ${workProfile.monthlySalary}/mo • {workProfile.workingDays}d • {workProfile.hoursPerDay}h/day
-                  </p>
-                </div>
-                <Link to="/profile">
-                  <Button variant="outline" size="sm" className="text-xs px-2 py-1">
-                    <Settings className="h-3 w-3 mr-1" />
-                    Edit
-                  </Button>
-                </Link>
+          <div className="bg-card rounded-2xl p-4 border shadow-sm flex-shrink-0">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="font-bold text-primary text-lg">${workProfile.hourlyRate.toFixed(2)}</h3>
+                <p className="text-sm text-muted-foreground">
+                  per hour • {workProfile.workingDays} days • {workProfile.hoursPerDay}h/day
+                </p>
               </div>
-            </CardContent>
-          </Card>
+              <Link to="/profile">
+                <Button variant="outline" size="sm" className="rounded-full">
+                  <Settings className="h-4 w-4 mr-1" />
+                  Edit
+                </Button>
+              </Link>
+            </div>
+          </div>
         )}
 
         {/* Product Cost Calculator */}
-        <Card className="border-work-time/20 flex-1 min-h-0 flex flex-col">
-          <CardHeader className="bg-work-time text-work-time-foreground p-4 flex-shrink-0">
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <Clock className="h-4 w-4" />
-              Product Cost Calculator
-            </CardTitle>
-            <CardDescription className="text-work-time-foreground/80 text-sm">
-              Enter a price to see work time needed
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
+        <div className="bg-card rounded-2xl border shadow-sm flex-1 min-h-0 flex flex-col">
+          <div className="p-6 flex-shrink-0">
+            <h2 className="text-2xl font-bold text-center mb-2">WORTH IT?</h2>
+            <p className="text-center text-muted-foreground text-sm mb-6">
+              Enter a price to see how much work time it costs
+            </p>
+            
             {!hasProfile && (
-              <Alert>
+              <Alert className="mb-4">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription className="flex items-center justify-between text-sm">
                   <span>Set up your work profile first</span>
                   <Link to="/profile">
-                    <Button size="sm" className="text-xs px-2 py-1">Setup</Button>
+                    <Button size="sm" className="text-xs px-3 py-1 rounded-full">Setup</Button>
                   </Link>
                 </AlertDescription>
               </Alert>
             )}
 
-            <div className="flex gap-2">
-              <div className="flex-1 space-y-1">
-                <Label htmlFor="productPrice" className="text-sm font-medium">
-                  Product Price ($)
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="productPrice" className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                  Purchase Price
                 </Label>
-                <Input
-                  id="productPrice"
-                  type="number"
-                  step="0.01"
-                  placeholder="299.99"
-                  disabled={!hasProfile}
-                  value={productPrice || ''}
-                  onChange={(e) => setProductPrice(parseFloat(e.target.value) || 0)}
-                  className="border-work-time/30 focus:border-work-time"
-                />
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">$</span>
+                  <Input
+                    id="productPrice"
+                    type="number"
+                    step="0.01"
+                    placeholder="299.99"
+                    disabled={!hasProfile}
+                    value={productPrice || ''}
+                    onChange={(e) => setProductPrice(parseFloat(e.target.value) || 0)}
+                    className="pl-8 h-12 text-lg font-medium rounded-xl border-2 focus:border-primary"
+                  />
+                </div>
               </div>
-              <div className="flex items-end">
-                <Button 
-                  onClick={calculateProductCost}
-                  disabled={!hasProfile || productPrice <= 0}
-                  className="bg-work-time hover:bg-work-time/90 text-work-time-foreground px-4"
-                >
-                  Calculate
-                </Button>
+              <Button 
+                onClick={calculateProductCost}
+                disabled={!hasProfile || productPrice <= 0}
+                className="w-full h-12 rounded-xl font-semibold text-base"
+                size="lg"
+              >
+                Calculate Work Time
+              </Button>
+            </div>
+          </div>
+
+          {productCost && workProfile && (
+            <div className="px-6 pb-6 space-y-6">
+              <div className="text-center">
+                <div className="inline-flex items-center gap-2 text-muted-foreground text-sm mb-2">
+                  <Clock className="h-4 w-4" />
+                  Time at Work
+                </div>
+                <div className="text-3xl font-bold text-primary mb-6">
+                  {formatTime(productCost.hoursNeeded, workProfile)}
+                </div>
+                
+                <div className="bg-muted/50 rounded-2xl p-4 mb-6">
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                      <TrendingUp className="h-4 w-4 text-primary-foreground" />
+                    </div>
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    Reality Check
+                  </div>
+                  <div className="text-lg font-semibold">
+                    ${productCost.price.toFixed(2)} = {formatTime(productCost.hoursNeeded, workProfile)}
+                  </div>
+                </div>
+                
+                <div className="flex gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={resetCalculation}
+                    className="flex-1 h-12 rounded-xl font-semibold border-2"
+                  >
+                    Don't Buy
+                  </Button>
+                  <Button
+                    onClick={viewFinancialJourney}
+                    className="flex-1 h-12 rounded-xl font-semibold bg-primary hover:bg-primary/90"
+                  >
+                    Buy
+                  </Button>
+                </div>
               </div>
             </div>
-
-            {productCost && workProfile && (
-              <div className="space-y-3 animate-gold-glow">
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="p-4 bg-gold/10 border border-gold/30 rounded-lg text-center transition-all duration-300 hover:bg-gold/20">
-                    <Clock className="h-6 w-6 text-gold mx-auto mb-2" />
-                    <h3 className="text-sm font-semibold text-gold mb-1">Work Hours</h3>
-                    <p className="text-xl font-bold text-gold">
-                      {formatTime(productCost.hoursNeeded, workProfile)}
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {productCost.hoursNeeded.toFixed(1)}h total
-                    </p>
-                  </div>
-                  
-                  <div className="p-4 bg-savings/10 border border-savings/20 rounded-lg text-center">
-                    <Calendar className="h-6 w-6 text-savings mx-auto mb-2" />
-                    <h3 className="text-sm font-semibold text-savings mb-1">Work Days</h3>
-                    <p className="text-xl font-bold text-savings">
-                      {productCost.daysNeeded.toFixed(1)} days
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {workProfile.hoursPerDay}h/day
-                    </p>
-                  </div>
-                </div>
-
-                <div className="p-3 bg-muted rounded-lg">
-                  <h4 className="font-semibold mb-1 text-sm">Reality Check:</h4>
-                  <p className="text-muted-foreground text-sm">
-                    ${productCost.price.toFixed(2)} costs{' '}
-                    <span className="font-semibold text-foreground">
-                      {formatTime(productCost.hoursNeeded, workProfile)}
-                    </span>
-                    {productCost.daysNeeded >= 1 && (
-                      <span>
-                        {' '}({productCost.daysNeeded.toFixed(1)} day{productCost.daysNeeded >= 2 ? 's' : ''})
-                      </span>
-                    )}
-                  </p>
-                </div>
-
-                {/* Navigation Buttons */}
-                <div className="flex gap-2 mt-4">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={resetCalculation}
-                    className="flex-1 text-xs"
-                  >
-                    New Calculation
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={viewFinancialJourney}
-                    className="flex-1 text-xs"
-                  >
-                    View Journey
-                  </Button>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+          )}
+        </div>
         
         {/* Gold Coins Animation */}
         {showCoins && (
@@ -424,26 +406,21 @@ const ProductCalculator: React.FC = () => {
                   {showAllMonths && monthlyData.length > 0 && (
                     <div className="space-y-1 max-h-32 overflow-y-auto">
                       <h4 className="font-semibold text-xs mb-1">Monthly Breakdown:</h4>
-                      {monthlyData.slice(0, 4).map((month, index) => (
-                        <div key={index} className="flex justify-between items-center p-2 rounded bg-muted">
-                          <span className="text-xs font-medium">
+                      {monthlyData.map((month) => (
+                        <div key={`${month.month}-${month.year}`} className="flex justify-between items-center text-xs p-1 rounded bg-muted/30">
+                          <span className="font-medium">
                             {getMonthName(month.month)} {month.year}
                           </span>
-                          <div className="flex gap-3 text-xs">
+                          <div className="flex gap-2">
                             <span className="text-red-600 dark:text-red-400">
-                              -${Number(month.total_spent).toFixed(0)}
+                              -${month.total_spent.toFixed(0)}
                             </span>
                             <span className="text-green-600 dark:text-green-400">
-                              +${Number(month.total_saved).toFixed(0)}
+                              +${month.total_saved.toFixed(0)}
                             </span>
                           </div>
                         </div>
                       ))}
-                      {monthlyData.length > 4 && (
-                        <div className="text-center text-xs text-muted-foreground py-1">
-                          +{monthlyData.length - 4} more months
-                        </div>
-                      )}
                     </div>
                   )}
                 </div>
