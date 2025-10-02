@@ -140,7 +140,7 @@ const ProductCalculator: React.FC = () => {
             </Button>
           </div>
           <p className="text-muted-foreground text-sm">
-            Welcome back, {user?.email}! How much work time does it cost?
+            Welcome back, {user?.user_metadata?.username || user?.email}! How much work time does it cost?
           </p>
         </div>
 
