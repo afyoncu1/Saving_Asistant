@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Clock, AlertCircle, Settings, X, ArrowLeft, TrendingUp } from 'lucide-react';
+import { Clock, AlertCircle, Settings, X, ArrowLeft } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useWorkProfile, WorkProfile } from '@/hooks/useWorkProfile';
 import { Link } from 'react-router-dom';
@@ -113,156 +113,174 @@ const ProductCalculator: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-background via-background to-muted/30 p-4 relative ${showFinancialJourney ? 'overflow-y-auto' : 'h-screen overflow-hidden'}`}>
-      <div className={`max-w-sm mx-auto flex flex-col space-y-6 ${showFinancialJourney ? 'min-h-full' : 'h-full'}`}>
+    <div className={`min-h-screen bg-background p-3 relative ${showFinancialJourney ? 'overflow-y-auto' : 'h-screen overflow-hidden'}`}>
+      <div className={`max-w-md mx-auto flex flex-col space-y-4 ${showFinancialJourney ? 'min-h-full' : 'h-full'}`}>
         {/* Header */}
-        <div className="text-center space-y-4 flex-shrink-0">
+        <div className="text-center space-y-1 flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-center gap-3 flex-1">
               <img 
                 src="/lovable-uploads/6d15c0f9-f3ec-4b49-894a-4b5a55ff860b.png" 
                 alt="Saving Assistant Logo" 
-                className="h-14 w-14 object-contain rounded-xl"
+                className="h-16 w-16 object-contain rounded-lg"
                 style={{ 
                   filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.1))',
                   mixBlendMode: 'multiply'
                 }}
               />
-              <h1 className="text-2xl font-bold text-primary">💰 Saving Assistant</h1>
+              <h1 className="text-2xl font-bold text-primary">Saving Assistant</h1>
             </div>
             <Button
               variant="ghost"
               size="sm"
               onClick={signOut}
-              className="text-muted-foreground hover:text-foreground rounded-full"
+              className="text-muted-foreground hover:text-foreground"
             >
-              👋 Sign Out
+              Sign Out
             </Button>
           </div>
-          <div className="bg-card rounded-2xl p-5 border shadow-sm">
-            <p className="text-foreground font-bold text-lg">
-              🎉 Welcome back, {user?.email?.split('@')[0]}!
-            </p>
-            <p className="text-muted-foreground text-base mt-2">
-              ⏰ Let's see what your time is really worth
-            </p>
-          </div>
+          <p className="text-muted-foreground text-sm">
+            Welcome back, {user?.email}! How much work time does it cost?
+          </p>
         </div>
 
         {/* Work Profile Status */}
         {hasProfile && workProfile && (
-          <div className="bg-card rounded-2xl p-5 border shadow-sm flex-shrink-0">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-bold text-primary text-2xl">💵 ${workProfile.hourlyRate.toFixed(2)}</h3>
-                <p className="text-base text-muted-foreground mt-1">
-                  ⏰ per hour • 📅 {workProfile.workingDays} days • 🕒 {workProfile.hoursPerDay}h/day
-                </p>
+          <Card className="border-primary/20 flex-shrink-0">
+            <CardContent className="p-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-semibold text-primary text-sm">You earn ${workProfile.hourlyRate.toFixed(2)}/hour</h3>
+                  <p className="text-xs text-muted-foreground">
+                    ${workProfile.monthlySalary}/mo • {workProfile.workingDays}d • {workProfile.hoursPerDay}h/day
+                  </p>
+                </div>
+                <Link to="/profile">
+                  <Button variant="outline" size="sm" className="text-xs px-2 py-1">
+                    <Settings className="h-3 w-3 mr-1" />
+                    Edit
+                  </Button>
+                </Link>
               </div>
-              <Link to="/profile">
-                <Button variant="outline" size="lg" className="rounded-full font-semibold">
-                  <Settings className="h-4 w-4 mr-2" />
-                  ⚙️ Edit
-                </Button>
-              </Link>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         )}
 
         {/* Product Cost Calculator */}
-        <div className="bg-card rounded-2xl border shadow-sm flex-1 min-h-0 flex flex-col">
-          <div className="p-6 flex-shrink-0">
-            <h2 className="text-4xl font-bold text-center mb-3">🤔 WORTH IT?</h2>
-            <p className="text-center text-muted-foreground text-lg mb-6">
-              💸 Enter a price to see how much work time it costs
-            </p>
-            
+        <Card className="border-work-time/20 flex-1 min-h-0 flex flex-col">
+          <CardHeader className="bg-work-time text-work-time-foreground p-4 flex-shrink-0">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Clock className="h-4 w-4" />
+              Product Cost Calculator
+            </CardTitle>
+            <CardDescription className="text-work-time-foreground/80 text-sm">
+              Enter a price to see work time needed
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
             {!hasProfile && (
-              <Alert className="mb-4">
+              <Alert>
                 <AlertCircle className="h-4 w-4" />
-                <AlertDescription className="flex items-center justify-between text-base">
-                  <span>⚠️ Set up your work profile first</span>
+                <AlertDescription className="flex items-center justify-between text-sm">
+                  <span>Set up your work profile first</span>
                   <Link to="/profile">
-                    <Button size="sm" className="text-sm px-4 py-2 rounded-full font-semibold">🚀 Setup</Button>
+                    <Button size="sm" className="text-xs px-2 py-1">Setup</Button>
                   </Link>
                 </AlertDescription>
               </Alert>
             )}
 
-            <div className="space-y-5">
-              <div className="space-y-3">
-                <Label htmlFor="productPrice" className="text-base font-bold text-muted-foreground uppercase tracking-wide">
-                  💰 Purchase Price
+            <div className="flex gap-2">
+              <div className="flex-1 space-y-1">
+                <Label htmlFor="productPrice" className="text-sm font-medium">
+                  Product Price ($)
                 </Label>
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground text-xl font-bold">$</span>
-                  <Input
-                    id="productPrice"
-                    type="number"
-                    step="0.01"
-                    placeholder="299.99"
-                    disabled={!hasProfile}
-                    value={productPrice || ''}
-                    onChange={(e) => setProductPrice(parseFloat(e.target.value) || 0)}
-                    className="pl-10 h-14 text-2xl font-bold rounded-xl border-2 focus:border-primary"
-                  />
-                </div>
+                <Input
+                  id="productPrice"
+                  type="number"
+                  step="0.01"
+                  placeholder="299.99"
+                  disabled={!hasProfile}
+                  value={productPrice || ''}
+                  onChange={(e) => setProductPrice(parseFloat(e.target.value) || 0)}
+                  className="border-work-time/30 focus:border-work-time"
+                />
               </div>
-              <Button 
-                onClick={calculateProductCost}
-                disabled={!hasProfile || productPrice <= 0}
-                className="w-full h-14 rounded-xl font-bold text-lg"
-                size="lg"
-              >
-                🚀 Calculate Work Time
-              </Button>
+              <div className="flex items-end">
+                <Button 
+                  onClick={calculateProductCost}
+                  disabled={!hasProfile || productPrice <= 0}
+                  className="bg-work-time hover:bg-work-time/90 text-work-time-foreground px-4"
+                >
+                  Calculate
+                </Button>
+              </div>
             </div>
-          </div>
 
-          {productCost && workProfile && (
-            <div className="px-6 pb-6 space-y-6">
-              <div className="text-center">
-                <div className="inline-flex items-center gap-2 text-muted-foreground text-lg mb-3">
-                  <Clock className="h-5 w-5" />
-                  ⏰ Time at Work
-                </div>
-                <div className="text-5xl font-bold text-primary mb-6">
-                  {formatTime(productCost.hoursNeeded, workProfile)}
-                </div>
-                
-                <div className="bg-muted/50 rounded-2xl p-6 mb-8">
-                  <div className="flex items-center justify-center gap-2 mb-3">
-                    <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-                      <TrendingUp className="h-6 w-6 text-primary-foreground" />
-                    </div>
+            {productCost && workProfile && (
+              <div className="space-y-3 animate-gold-glow">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="p-4 bg-gold/10 border border-gold/30 rounded-lg text-center transition-all duration-300 hover:bg-gold/20">
+                    <Clock className="h-6 w-6 text-gold mx-auto mb-2" />
+                    <h3 className="text-sm font-semibold text-gold mb-1">Work Hours</h3>
+                    <p className="text-xl font-bold text-gold">
+                      {formatTime(productCost.hoursNeeded, workProfile)}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {productCost.hoursNeeded.toFixed(1)}h total
+                    </p>
                   </div>
-                  <div className="text-lg text-muted-foreground mb-2">
-                    💡 Reality Check
-                  </div>
-                  <div className="text-2xl font-bold">
-                    💰 ${productCost.price.toFixed(2)} = ⏱️ {formatTime(productCost.hoursNeeded, workProfile)}
+                  
+                  <div className="p-4 bg-savings/10 border border-savings/20 rounded-lg text-center">
+                    <Calendar className="h-6 w-6 text-savings mx-auto mb-2" />
+                    <h3 className="text-sm font-semibold text-savings mb-1">Work Days</h3>
+                    <p className="text-xl font-bold text-savings">
+                      {productCost.daysNeeded.toFixed(1)} days
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {workProfile.hoursPerDay}h/day
+                    </p>
                   </div>
                 </div>
-                
-                <div className="flex gap-4">
+
+                <div className="p-3 bg-muted rounded-lg">
+                  <h4 className="font-semibold mb-1 text-sm">Reality Check:</h4>
+                  <p className="text-muted-foreground text-sm">
+                    ${productCost.price.toFixed(2)} costs{' '}
+                    <span className="font-semibold text-foreground">
+                      {formatTime(productCost.hoursNeeded, workProfile)}
+                    </span>
+                    {productCost.daysNeeded >= 1 && (
+                      <span>
+                        {' '}({productCost.daysNeeded.toFixed(1)} day{productCost.daysNeeded >= 2 ? 's' : ''})
+                      </span>
+                    )}
+                  </p>
+                </div>
+
+                {/* Navigation Buttons */}
+                <div className="flex gap-2 mt-4">
                   <Button
                     variant="outline"
+                    size="sm"
                     onClick={resetCalculation}
-                    className="flex-1 h-14 rounded-xl font-bold text-lg border-2"
+                    className="flex-1 text-xs"
                   >
-                    ❌ Don't Buy
+                    New Calculation
                   </Button>
                   <Button
+                    variant="outline"
+                    size="sm"
                     onClick={viewFinancialJourney}
-                    className="flex-1 h-14 rounded-xl font-bold text-lg bg-primary hover:bg-primary/90"
+                    className="flex-1 text-xs"
                   >
-                    ✅ Buy
+                    View Journey
                   </Button>
                 </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </CardContent>
+        </Card>
         
         {/* Gold Coins Animation */}
         {showCoins && (
@@ -348,45 +366,45 @@ const ProductCalculator: React.FC = () => {
         {(!productCost || showFinancialJourney) && (
           <Card className="mt-3 border-primary/10">
             {showFinancialJourney && (
-              <div className="flex justify-end p-3 border-b">
+              <div className="flex justify-end p-2 border-b">
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setShowFinancialJourney(false)}
-                  className="text-sm px-3 h-8 font-semibold"
+                  className="text-xs px-2 h-6"
                 >
-                  <X className="h-4 w-4 mr-2" />
-                  ❌ Close
+                  <X className="h-3 w-3 mr-1" />
+                  Close
                 </Button>
               </div>
             )}
-            <CardHeader className="pb-3">
-              <CardTitle className="text-xl font-bold">
-                📊 {showAllMonths ? 'All Time Journey' : `${getMonthName(getCurrentMonth().month)} ${getCurrentMonth().year}`}
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm">
+                {showAllMonths ? 'All Time Journey' : `${getMonthName(getCurrentMonth().month)} ${getCurrentMonth().year}`}
               </CardTitle>
               {!showAllMonths && (
-                <CardDescription className="text-base">🎯 Your financial decisions this month</CardDescription>
+                <CardDescription className="text-xs">Your financial decisions this month</CardDescription>
               )}
             </CardHeader>
-            <CardContent className="pt-0 pb-4 space-y-4">
+            <CardContent className="pt-0 pb-3 space-y-3">
               {spendingLoading ? (
-                <div className="text-center text-muted-foreground text-base py-3">⏳ Loading your totals...</div>
+                <div className="text-center text-muted-foreground text-xs py-2">Loading your totals...</div>
               ) : (
-                <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="text-center p-4 rounded-2xl bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800">
-                      <div className="text-2xl font-bold text-red-600 dark:text-red-400">
-                        💸 ${showAllMonths ? totals.totalSpent.toFixed(0) : currentMonthTotals.totalSpent.toFixed(0)}
+                <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="text-center p-3 rounded-lg bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800">
+                      <div className="text-lg font-bold text-red-600 dark:text-red-400">
+                        ${showAllMonths ? totals.totalSpent.toFixed(0) : currentMonthTotals.totalSpent.toFixed(0)}
                       </div>
-                      <div className="text-sm text-red-700 dark:text-red-300 font-bold mt-1">
+                      <div className="text-xs text-red-700 dark:text-red-300 font-medium">
                         Total Spent
                       </div>
                     </div>
-                    <div className="text-center p-4 rounded-2xl bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800">
-                      <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-                        💰 ${showAllMonths ? totals.totalSaved.toFixed(0) : currentMonthTotals.totalSaved.toFixed(0)}
+                    <div className="text-center p-3 rounded-lg bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800">
+                      <div className="text-lg font-bold text-green-600 dark:text-green-400">
+                        ${showAllMonths ? totals.totalSaved.toFixed(0) : currentMonthTotals.totalSaved.toFixed(0)}
                       </div>
-                      <div className="text-sm text-green-700 dark:text-green-300 font-bold mt-1">
+                      <div className="text-xs text-green-700 dark:text-green-300 font-medium">
                         Total Saved
                       </div>
                     </div>
@@ -395,32 +413,37 @@ const ProductCalculator: React.FC = () => {
                   <div className="flex justify-center">
                     <Button
                       variant="outline"
-                      size="lg"
+                      size="sm"
                       onClick={() => setShowAllMonths(!showAllMonths)}
-                      className="text-base h-10 px-6 font-semibold"
+                      className="text-xs h-6 px-3"
                     >
-                      {showAllMonths ? '📅 Show This Month' : '📈 View All Months'}
+                      {showAllMonths ? 'Show This Month' : 'View All Months'}
                     </Button>
                   </div>
 
                   {showAllMonths && monthlyData.length > 0 && (
-                    <div className="space-y-2 max-h-40 overflow-y-auto">
-                      <h4 className="font-bold text-base mb-2">📋 Monthly Breakdown:</h4>
-                      {monthlyData.map((month) => (
-                        <div key={`${month.month}-${month.year}`} className="flex justify-between items-center text-sm p-2 rounded-lg bg-muted/30">
-                          <span className="font-bold">
-                            📅 {getMonthName(month.month)} {month.year}
+                    <div className="space-y-1 max-h-32 overflow-y-auto">
+                      <h4 className="font-semibold text-xs mb-1">Monthly Breakdown:</h4>
+                      {monthlyData.slice(0, 4).map((month, index) => (
+                        <div key={index} className="flex justify-between items-center p-2 rounded bg-muted">
+                          <span className="text-xs font-medium">
+                            {getMonthName(month.month)} {month.year}
                           </span>
-                          <div className="flex gap-3">
-                            <span className="text-red-600 dark:text-red-400 font-semibold">
-                              💸 -${month.total_spent.toFixed(0)}
+                          <div className="flex gap-3 text-xs">
+                            <span className="text-red-600 dark:text-red-400">
+                              -${Number(month.total_spent).toFixed(0)}
                             </span>
-                            <span className="text-green-600 dark:text-green-400 font-semibold">
-                              💰 +${month.total_saved.toFixed(0)}
+                            <span className="text-green-600 dark:text-green-400">
+                              +${Number(month.total_saved).toFixed(0)}
                             </span>
                           </div>
                         </div>
                       ))}
+                      {monthlyData.length > 4 && (
+                        <div className="text-center text-xs text-muted-foreground py-1">
+                          +{monthlyData.length - 4} more months
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
